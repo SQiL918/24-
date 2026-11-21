@@ -127,6 +127,11 @@
   *      USART1, USART2, USART3, UART4 or UART5.
   * @retval None
   */
+/**
+  * 函    数：将指定 USART 或 UART 恢复到外设复位状态
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  * 返 回 值：无
+  */
 void USART_DeInit(USART_TypeDef* USARTx)
 {
   /* Check the parameters */
@@ -172,6 +177,12 @@ void USART_DeInit(USART_TypeDef* USARTx)
   *         that contains the configuration information for the specified USART 
   *         peripheral.
   * @retval None
+  */
+/**
+  * 函    数：配置波特率、字长、停止位、校验、收发及流控
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           USART_InitStruct：波特率、字长、校验、停止位、模式等参数的结构体指针
+  * 返 回 值：无
   */
 void USART_Init(USART_TypeDef* USARTx, USART_InitTypeDef* USART_InitStruct)
 {
@@ -235,11 +246,11 @@ void USART_Init(USART_TypeDef* USARTx, USART_InitTypeDef* USART_InitStruct)
   RCC_GetClocksFreq(&RCC_ClocksStatus);
   if (usartxbase == USART1_BASE)
   {
-    apbclock = RCC_ClocksStatus.PCLK2_Frequency;
+    apbclock = RCC_ClocksStatus.PCLK2_Frequency;    // USART1 使用 APB2 外设时钟
   }
   else
   {
-    apbclock = RCC_ClocksStatus.PCLK1_Frequency;
+    apbclock = RCC_ClocksStatus.PCLK1_Frequency;    // 其他 USART 或 UART 使用 APB1 外设时钟
   }
   
   /* Determine the integer part */
@@ -253,7 +264,7 @@ void USART_Init(USART_TypeDef* USARTx, USART_InitTypeDef* USART_InitStruct)
     /* Integer part computing in case Oversampling mode is 16 Samples */
     integerdivider = ((25 * apbclock) / (4 * (USART_InitStruct->USART_BaudRate)));    
   }
-  tmpreg = (integerdivider / 100) << 4;
+  tmpreg = (integerdivider / 100) << 4;             // 波特率分频整数部分从 BRR 的第 4 位开始
 
   /* Determine the fractional part */
   fractionaldivider = integerdivider - (100 * (tmpreg >> 4));
@@ -265,11 +276,11 @@ void USART_Init(USART_TypeDef* USARTx, USART_InitTypeDef* USART_InitStruct)
   }
   else /* if ((USARTx->CR1 & CR1_OVER8_Set) == 0) */
   {
-    tmpreg |= ((((fractionaldivider * 16) + 50) / 100)) & ((uint8_t)0x0F);
+    tmpreg |= ((((fractionaldivider * 16) + 50) / 100)) & ((uint8_t)0x0F);  // 16 倍过采样使用 4 位分数部分并四舍五入
   }
   
   /* Write to USART BRR */
-  USARTx->BRR = (uint16_t)tmpreg;
+  USARTx->BRR = (uint16_t)tmpreg;                   // 写入 BRR，使波特率匹配计算结果
 }
 
 /**
@@ -277,6 +288,11 @@ void USART_Init(USART_TypeDef* USARTx, USART_InitTypeDef* USART_InitStruct)
   * @param  USART_InitStruct: pointer to a USART_InitTypeDef structure
   *         which will be initialized.
   * @retval None
+  */
+/**
+  * 函    数：为异步收发配置结构体填入默认值
+  * 参    数：USART_InitStruct：用于接收默认配置的结构体指针
+  * 返 回 值：无
   */
 void USART_StructInit(USART_InitTypeDef* USART_InitStruct)
 {
@@ -298,6 +314,12 @@ void USART_StructInit(USART_InitTypeDef* USART_InitStruct)
   *         USART peripheral.  
   * @note The Smart Card and Synchronous modes are not available for UART4 and UART5.
   * @retval None
+  */
+/**
+  * 函    数：配置 USART 同步时钟输出及其极性、相位
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           USART_ClockInitStruct：同步时钟输出、极性、相位等参数的结构体指针
+  * 返 回 值：无
   */
 void USART_ClockInit(USART_TypeDef* USARTx, USART_ClockInitTypeDef* USART_ClockInitStruct)
 {
@@ -330,6 +352,11 @@ void USART_ClockInit(USART_TypeDef* USARTx, USART_ClockInitTypeDef* USART_ClockI
   *         structure which will be initialized.
   * @retval None
   */
+/**
+  * 函    数：为同步时钟配置结构体填入默认值
+  * 参    数：USART_ClockInitStruct：用于接收默认配置的结构体指针
+  * 返 回 值：无
+  */
 void USART_ClockStructInit(USART_ClockInitTypeDef* USART_ClockInitStruct)
 {
   /* USART_ClockInitStruct members default value */
@@ -347,6 +374,12 @@ void USART_ClockStructInit(USART_ClockInitTypeDef* USART_ClockInitStruct)
   * @param  NewState: new state of the USARTx peripheral.
   *         This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭 USART 或 UART
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void USART_Cmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
@@ -384,6 +417,13 @@ void USART_Cmd(USART_TypeDef* USARTx, FunctionalState NewState)
   * @param  NewState: new state of the specified USARTx interrupts.
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭指定的串口中断源
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           USART_IT：串口中断源选择值
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void USART_ITConfig(USART_TypeDef* USARTx, uint16_t USART_IT, FunctionalState NewState)
 {
@@ -431,7 +471,7 @@ void USART_ITConfig(USART_TypeDef* USARTx, uint16_t USART_IT, FunctionalState Ne
 }
 
 /**
-  * @brief  Enables or disables the USART�s DMA interface.
+  * @brief  Enables or disables the USART’s DMA interface.
   * @param  USARTx: Select the USART or the UART peripheral. 
   *   This parameter can be one of the following values:
   *   USART1, USART2, USART3, UART4 or UART5.
@@ -444,6 +484,13 @@ void USART_ITConfig(USART_TypeDef* USARTx, uint16_t USART_IT, FunctionalState Ne
   * @note The DMA mode is not available for UART5 except in the STM32
   *       High density value line devices(STM32F10X_HD_VL).  
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭指定的串口收发 DMA 请求
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           USART_DMAReq：USART 发送或接收 DMA 请求掩码
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void USART_DMACmd(USART_TypeDef* USARTx, uint16_t USART_DMAReq, FunctionalState NewState)
 {
@@ -473,6 +520,12 @@ void USART_DMACmd(USART_TypeDef* USARTx, uint16_t USART_DMAReq, FunctionalState 
   * @param  USART_Address: Indicates the address of the USART node.
   * @retval None
   */
+/**
+  * 函    数：配置多机通信使用的节点地址
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           USART_Address：串口节点地址，低 4 位有效
+  * 返 回 值：无
+  */
 void USART_SetAddress(USART_TypeDef* USARTx, uint8_t USART_Address)
 {
   /* Check the parameters */
@@ -496,6 +549,12 @@ void USART_SetAddress(USART_TypeDef* USARTx, uint8_t USART_Address)
   *     @arg USART_WakeUp_AddressMark: WakeUp by an address mark
   * @retval None
   */
+/**
+  * 函    数：选择串口接收端从静默模式唤醒的条件
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           USART_WakeUp：空闲线唤醒或地址标记唤醒选择
+  * 返 回 值：无
+  */
 void USART_WakeUpConfig(USART_TypeDef* USARTx, uint16_t USART_WakeUp)
 {
   /* Check the parameters */
@@ -514,6 +573,12 @@ void USART_WakeUpConfig(USART_TypeDef* USARTx, uint16_t USART_WakeUp)
   * @param  NewState: new state of the USART mute mode.
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：使接收端进入或退出静默模式
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void USART_ReceiverWakeUpCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
@@ -544,6 +609,12 @@ void USART_ReceiverWakeUpCmd(USART_TypeDef* USARTx, FunctionalState NewState)
   *     @arg USART_LINBreakDetectLength_11b: 11-bit break detection
   * @retval None
   */
+/**
+  * 函    数：配置 LIN 断开符检测位数
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           USART_LINBreakDetectLength：LIN 断开符检测长度，10 位或 11 位
+  * 返 回 值：无
+  */
 void USART_LINBreakDetectLengthConfig(USART_TypeDef* USARTx, uint16_t USART_LINBreakDetectLength)
 {
   /* Check the parameters */
@@ -555,13 +626,19 @@ void USART_LINBreakDetectLengthConfig(USART_TypeDef* USARTx, uint16_t USART_LINB
 }
 
 /**
-  * @brief  Enables or disables the USART�s LIN mode.
+  * @brief  Enables or disables the USART’s LIN mode.
   * @param  USARTx: Select the USART or the UART peripheral. 
   *   This parameter can be one of the following values:
   *   USART1, USART2, USART3, UART4 or UART5.
   * @param  NewState: new state of the USART LIN mode.
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭 LIN 模式
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void USART_LINCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
@@ -589,6 +666,12 @@ void USART_LINCmd(USART_TypeDef* USARTx, FunctionalState NewState)
   * @param  Data: the data to transmit.
   * @retval None
   */
+/**
+  * 函    数：向串口数据寄存器写入一个发送数据字
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           Data：要写入串口的发送数据字，按当前字长与校验配置取有效位
+  * 返 回 值：无
+  */
 void USART_SendData(USART_TypeDef* USARTx, uint16_t Data)
 {
   /* Check the parameters */
@@ -606,6 +689,11 @@ void USART_SendData(USART_TypeDef* USARTx, uint16_t Data)
   *   USART1, USART2, USART3, UART4 or UART5.
   * @retval The received data.
   */
+/**
+  * 函    数：读取串口数据寄存器中的接收数据
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  * 返 回 值：数据寄存器低 9 位，实际有效位数取决于字长及校验配置
+  */
 uint16_t USART_ReceiveData(USART_TypeDef* USARTx)
 {
   /* Check the parameters */
@@ -622,6 +710,11 @@ uint16_t USART_ReceiveData(USART_TypeDef* USARTx)
   *   USART1, USART2, USART3, UART4 or UART5.
   * @retval None
   */
+/**
+  * 函    数：请求串口发送一个断开符
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  * 返 回 值：无
+  */
 void USART_SendBreak(USART_TypeDef* USARTx)
 {
   /* Check the parameters */
@@ -637,6 +730,12 @@ void USART_SendBreak(USART_TypeDef* USARTx)
   * @param  USART_GuardTime: specifies the guard time.
   * @note The guard time bits are not available for UART4 and UART5.   
   * @retval None
+  */
+/**
+  * 函    数：设置智能卡模式的保护时间
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           USART_GuardTime：智能卡模式的保护时间配置字节
+  * 返 回 值：无
   */
 void USART_SetGuardTime(USART_TypeDef* USARTx, uint8_t USART_GuardTime)
 {    
@@ -658,6 +757,12 @@ void USART_SetGuardTime(USART_TypeDef* USARTx, uint8_t USART_GuardTime)
   * @note   The function is used for IrDA mode with UART4 and UART5.
   * @retval None
   */
+/**
+  * 函    数：设置 IrDA 低功耗或智能卡时钟所用的预分频
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           USART_Prescaler：串口预分频寄存器的 8 位配置值
+  * 返 回 值：无
+  */
 void USART_SetPrescaler(USART_TypeDef* USARTx, uint8_t USART_Prescaler)
 { 
   /* Check the parameters */
@@ -670,12 +775,18 @@ void USART_SetPrescaler(USART_TypeDef* USARTx, uint8_t USART_Prescaler)
 }
 
 /**
-  * @brief  Enables or disables the USART�s Smart Card mode.
+  * @brief  Enables or disables the USART’s Smart Card mode.
   * @param  USARTx: where x can be 1, 2 or 3 to select the USART peripheral.
   * @param  NewState: new state of the Smart Card mode.
   *   This parameter can be: ENABLE or DISABLE.     
   * @note The Smart Card mode is not available for UART4 and UART5. 
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭智能卡模式
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void USART_SmartCardCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
@@ -702,6 +813,12 @@ void USART_SmartCardCmd(USART_TypeDef* USARTx, FunctionalState NewState)
   * @note The Smart Card mode is not available for UART4 and UART5.
   * @retval None
   */
+/**
+  * 函    数：使能或关闭智能卡模式下的 NACK 应答
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
+  */
 void USART_SmartCardNACKCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
   /* Check the parameters */
@@ -720,13 +837,19 @@ void USART_SmartCardNACKCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 }
 
 /**
-  * @brief  Enables or disables the USART�s Half Duplex communication.
+  * @brief  Enables or disables the USART’s Half Duplex communication.
   * @param  USARTx: Select the USART or the UART peripheral. 
   *   This parameter can be one of the following values:
   *   USART1, USART2, USART3, UART4 or UART5.
   * @param  NewState: new state of the USART Communication.
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭串口单线半双工
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void USART_HalfDuplexCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
@@ -759,6 +882,12 @@ void USART_HalfDuplexCmd(USART_TypeDef* USARTx, FunctionalState NewState)
   *     function in order to have correct baudrate Divider value.   
   * @retval None
   */
+/**
+  * 函    数：设置串口是否采用 8 倍过采样
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
+  */
 void USART_OverSampling8Cmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
   /* Check the parameters */
@@ -785,6 +914,12 @@ void USART_OverSampling8Cmd(USART_TypeDef* USARTx, FunctionalState NewState)
   * @param  NewState: new state of the USART one bit sampling method.
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：选择单点采样法或多点采样法
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void USART_OneBitMethodCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
@@ -815,6 +950,12 @@ void USART_OneBitMethodCmd(USART_TypeDef* USARTx, FunctionalState NewState)
   *     @arg USART_IrDAMode_Normal
   * @retval None
   */
+/**
+  * 函    数：选择 IrDA 正常或低功耗模式
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           USART_IrDAMode：IrDA 正常模式或低功耗模式选择
+  * 返 回 值：无
+  */
 void USART_IrDAConfig(USART_TypeDef* USARTx, uint16_t USART_IrDAMode)
 {
   /* Check the parameters */
@@ -833,6 +974,12 @@ void USART_IrDAConfig(USART_TypeDef* USARTx, uint16_t USART_IrDAMode)
   * @param  NewState: new state of the IrDA mode.
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭 IrDA 接口
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void USART_IrDACmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
@@ -870,6 +1017,12 @@ void USART_IrDACmd(USART_TypeDef* USARTx, FunctionalState NewState)
   *     @arg USART_FLAG_FE:   Framing Error flag
   *     @arg USART_FLAG_PE:   Parity Error flag
   * @retval The new state of USART_FLAG (SET or RESET).
+  */
+/**
+  * 函    数：查询指定的串口状态标志
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           USART_FLAG：要查询或清除的 USART 状态标志
+  * 返 回 值：SET 表示状态已置位，RESET 表示未置位
   */
 FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx, uint16_t USART_FLAG)
 {
@@ -920,6 +1073,12 @@ FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx, uint16_t USART_FLAG)
   *     (USART_SendData()).
   * @retval None
   */
+/**
+  * 函    数：清除可用软件写入方式清除的串口状态标志
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           USART_FLAG：要查询或清除的 USART 状态标志
+  * 返 回 值：无
+  */
 void USART_ClearFlag(USART_TypeDef* USARTx, uint16_t USART_FLAG)
 {
   /* Check the parameters */
@@ -952,6 +1111,12 @@ void USART_ClearFlag(USART_TypeDef* USARTx, uint16_t USART_FLAG)
   *     @arg USART_IT_FE:   Framing Error interrupt
   *     @arg USART_IT_PE:   Parity Error interrupt
   * @retval The new state of USART_IT (SET or RESET).
+  */
+/**
+  * 函    数：检查目标串口中断是否已使能且要求处理
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           USART_IT：串口中断源选择值
+  * 返 回 值：SET 表示满足两项条件，RESET 表示其他情况
   */
 ITStatus USART_GetITStatus(USART_TypeDef* USARTx, uint16_t USART_IT)
 {
@@ -1026,6 +1191,12 @@ ITStatus USART_GetITStatus(USART_TypeDef* USARTx, uint16_t USART_IT)
   *   - TXE pending bit is cleared only by a write to the USART_DR register 
   *     (USART_SendData()).
   * @retval None
+  */
+/**
+  * 函    数：清除指定的串口中断挂起位
+  * 参    数：USARTx：目标 USART 或 UART 实例，特定模式只支持部分实例
+  *           USART_IT：串口中断源选择值
+  * 返 回 值：无
   */
 void USART_ClearITPendingBit(USART_TypeDef* USARTx, uint16_t USART_IT)
 {

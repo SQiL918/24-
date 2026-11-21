@@ -30,10 +30,11 @@
 ;   <o> Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
 ; </h>
 
+; 栈空间为 2 KiB。保留上方 Keil Configuration Wizard 选项标记。
 Stack_Size      EQU     0x00000800
 
-                AREA    STACK, NOINIT, READWRITE, ALIGN=3
-Stack_Mem       SPACE   Stack_Size
+                AREA    STACK, NOINIT, READWRITE, ALIGN=3  ; 栈节不在启动时清零，使用 8 字节对齐
+Stack_Mem       SPACE   Stack_Size                  ; 为栈保留空间，初始栈顶位于其尾端
 __initial_sp
 
 
@@ -41,27 +42,28 @@ __initial_sp
 ;   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
 ; </h>
 
-Heap_Size       EQU     0x00000200
+Heap_Size       EQU     0x00000200                  ; C 运行库堆预留 512 B
 
                 AREA    HEAP, NOINIT, READWRITE, ALIGN=3
 __heap_base
 Heap_Mem        SPACE   Heap_Size
 __heap_limit
 
-                PRESERVE8
-                THUMB
+                PRESERVE8                           ; 声明保持 8 字节栈对齐
+                THUMB                               ; Cortex-M3 启动代码使用 Thumb 指令集
 
 
 ; Vector Table Mapped to Address 0 at Reset
+                ; 复位取用的向量表。首项为初始栈指针，第二项为复位入口。
                 AREA    RESET, DATA, READONLY
                 EXPORT  __Vectors
                 EXPORT  __Vectors_End
                 EXPORT  __Vectors_Size
 
-__Vectors       DCD     __initial_sp               ; Top of Stack
-                DCD     Reset_Handler              ; Reset Handler
+__Vectors       DCD     __initial_sp                ; 初始主栈指针
+                DCD     Reset_Handler               ; 复位后第一条指令的入口地址
                 DCD     NMI_Handler                ; NMI Handler
-                DCD     HardFault_Handler          ; Hard Fault Handler
+                DCD     HardFault_Handler           ; 硬故障，由 User/stm32f10x_it.c 提供实际处理函数
                 DCD     MemManage_Handler          ; MPU Fault Handler
                 DCD     BusFault_Handler           ; Bus Fault Handler
                 DCD     UsageFault_Handler         ; Usage Fault Handler
@@ -101,7 +103,7 @@ __Vectors       DCD     __initial_sp               ; Top of Stack
                 DCD     CAN1_SCE_IRQHandler        ; CAN1 SCE
                 DCD     EXTI9_5_IRQHandler         ; EXTI Line 9..5
                 DCD     TIM1_BRK_IRQHandler        ; TIM1 Break
-                DCD     TIM1_UP_IRQHandler         ; TIM1 Update
+                DCD     TIM1_UP_IRQHandler          ; TIM1 更新，由 App/control.c 提供 200 Hz 控制入口
                 DCD     TIM1_TRG_COM_IRQHandler    ; TIM1 Trigger and Commutation
                 DCD     TIM1_CC_IRQHandler         ; TIM1 Capture Compare
                 DCD     TIM2_IRQHandler            ; TIM2
@@ -113,7 +115,7 @@ __Vectors       DCD     __initial_sp               ; Top of Stack
                 DCD     I2C2_ER_IRQHandler         ; I2C2 Error
                 DCD     SPI1_IRQHandler            ; SPI1
                 DCD     SPI2_IRQHandler            ; SPI2
-                DCD     USART1_IRQHandler          ; USART1
+                DCD     USART1_IRQHandler           ; USART1，由 Bsp/gray_uart.c 提供灰度接收入口
                 DCD     USART2_IRQHandler          ; USART2
                 DCD     USART3_IRQHandler          ; USART3
                 DCD     EXTI15_10_IRQHandler       ; EXTI Line 15..10
@@ -126,60 +128,93 @@ __Vectors_Size  EQU  __Vectors_End - __Vectors
                 AREA    |.text|, CODE, READONLY
 
 ; Reset handler
+; 函    数：复位入口，完成系统初始化后跳转到 C 运行库
+; 参    数：无
+; 返 回 值：不返回
 Reset_Handler    PROC
                  EXPORT  Reset_Handler             [WEAK]
      IMPORT  __main
      IMPORT  SystemInit
-                 LDR     R0, =SystemInit
-                 BLX     R0
-                 LDR     R0, =__main
-                 BX      R0
+                 LDR     R0, =SystemInit            ; 取得时钟及系统初始化函数地址
+                 BLX     R0                         ; 调用 SystemInit 配置系统
+                 LDR     R0, =__main                ; 取得 ARM C 运行库入口 __main 的地址
+                 BX      R0                         ; 进入 C 运行库，初始化数据段后再调用用户 main
                  ENDP
 
 ; Dummy Exception Handlers (infinite loops which can be modified)
 
+; 函    数：不可屏蔽中断默认弱入口
+; 参    数：无
+; 返 回 值：未被应用覆盖时停在当前入口
 NMI_Handler     PROC
                 EXPORT  NMI_Handler                [WEAK]
                 B       .
                 ENDP
+; 函    数：硬故障默认弱入口
+; 参    数：无
+; 返 回 值：未被应用覆盖时停在当前入口
 HardFault_Handler\
                 PROC
                 EXPORT  HardFault_Handler          [WEAK]
                 B       .
                 ENDP
+; 函    数：内存管理故障默认弱入口
+; 参    数：无
+; 返 回 值：未被应用覆盖时停在当前入口
 MemManage_Handler\
                 PROC
                 EXPORT  MemManage_Handler          [WEAK]
                 B       .
                 ENDP
+; 函    数：总线故障默认弱入口
+; 参    数：无
+; 返 回 值：未被应用覆盖时停在当前入口
 BusFault_Handler\
                 PROC
                 EXPORT  BusFault_Handler           [WEAK]
                 B       .
                 ENDP
+; 函    数：用法故障默认弱入口
+; 参    数：无
+; 返 回 值：未被应用覆盖时停在当前入口
 UsageFault_Handler\
                 PROC
                 EXPORT  UsageFault_Handler         [WEAK]
                 B       .
                 ENDP
+; 函    数：SVC 异常默认弱入口
+; 参    数：无
+; 返 回 值：未被应用覆盖时停在当前入口
 SVC_Handler     PROC
                 EXPORT  SVC_Handler                [WEAK]
                 B       .
                 ENDP
+; 函    数：调试监视异常默认弱入口
+; 参    数：无
+; 返 回 值：未被应用覆盖时停在当前入口
 DebugMon_Handler\
                 PROC
                 EXPORT  DebugMon_Handler           [WEAK]
                 B       .
                 ENDP
+; 函    数：PendSV 异常默认弱入口
+; 参    数：无
+; 返 回 值：未被应用覆盖时停在当前入口
 PendSV_Handler  PROC
                 EXPORT  PendSV_Handler             [WEAK]
                 B       .
                 ENDP
+; 函    数：SysTick 中断默认弱入口
+; 参    数：无
+; 返 回 值：未被应用覆盖时停在当前入口
 SysTick_Handler PROC
                 EXPORT  SysTick_Handler            [WEAK]
                 B       .
                 ENDP
 
+; 函    数：未由应用实现的外设中断共用的默认处理
+; 参    数：无
+; 返 回 值：不返回
 Default_Handler PROC
 
                 EXPORT  WWDG_IRQHandler            [WEAK]
@@ -279,6 +314,7 @@ USBWakeUp_IRQHandler
 ;*******************************************************************************
 ; User Stack and Heap initialization
 ;*******************************************************************************
+                 ; MicroLIB 直接使用导出的栈顶和堆边界，普通 C 运行库通过下面的接口取得边界。
                  IF      :DEF:__MICROLIB           
                 
                  EXPORT  __initial_sp
@@ -290,13 +326,16 @@ USBWakeUp_IRQHandler
                  IMPORT  __use_two_region_memory
                  EXPORT  __user_initial_stackheap
                  
+; 函    数：向普通 ARM C 运行库提供栈和堆的边界
+; 参    数：无
+; 返 回 值：由 R0～R3 返回堆底、栈顶、堆顶、栈底
 __user_initial_stackheap
 
-                 LDR     R0, =  Heap_Mem
-                 LDR     R1, =(Stack_Mem + Stack_Size)
-                 LDR     R2, = (Heap_Mem +  Heap_Size)
-                 LDR     R3, = Stack_Mem
-                 BX      LR
+                 LDR     R0, =  Heap_Mem            ; R0 为堆区起始地址
+                 LDR     R1, =(Stack_Mem + Stack_Size)  ; R1 为初始栈顶指针
+                 LDR     R2, = (Heap_Mem +  Heap_Size)  ; R2 为堆区结束地址
+                 LDR     R3, = Stack_Mem            ; R3 为栈区起始地址
+                 BX      LR                         ; 返回调用方
 
                  ALIGN
 

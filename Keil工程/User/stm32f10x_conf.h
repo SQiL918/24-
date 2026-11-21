@@ -19,37 +19,27 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
+/* 防止头文件重复包含。 */
 #ifndef __STM32F10x_CONF_H
 #define __STM32F10x_CONF_H
 
-/* Includes ------------------------------------------------------------------*/
-/* Uncomment/Comment the line below to enable/disable peripheral header file inclusion */
+/* 引入当前工程所需的标准外设库头文件。 */
 #include "stm32f10x_adc.h"
 #include "stm32f10x_gpio.h"
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_tim.h"
 #include "stm32f10x_usart.h"
-#include "misc.h" /* High level functions for NVIC and SysTick (add-on to CMSIS functions) */
+#include "misc.h"                                   // CMSIS 基础上封装的 NVIC 与 SysTick 接口
 
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-/* Uncomment the line below to expanse the "assert_param" macro in the 
-   Standard Peripheral Library drivers code */
+/* 在调试配置中定义 USE_FULL_ASSERT 可开启标准外设库的参数检查。 */
 /* #define USE_FULL_ASSERT    1 */
 
-/* Exported macro ------------------------------------------------------------*/
+/* 按编译配置选择断言行为。 */
 #ifdef  USE_FULL_ASSERT
 
-/**
-  * @brief  The assert_param macro is used for function's parameters check.
-  * @param  expr: If expr is false, it calls assert_failed function which reports 
-  *         the name of the source file and the source line number of the call 
-  *         that failed. If expr is true, it returns no value.
-  * @retval None
-  */
+/* 断言失败时调用 assert_failed，传入源文件名和行号。断言通过时无操作。 */
   #define assert_param(expr) ((expr) ? (void)0 : assert_failed((uint8_t *)__FILE__, __LINE__))
-/* Exported functions ------------------------------------------------------- */
+/* 应用若启用完整断言，需要提供这个回调的定义。 */
   void assert_failed(uint8_t* file, uint32_t line);
 #else
   #define assert_param(expr) ((void)0)

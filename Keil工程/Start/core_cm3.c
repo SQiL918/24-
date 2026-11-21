@@ -55,6 +55,11 @@
  *
  * Return the actual process stack pointer
  */
+/**
+  * 函    数：读取线程可使用的进程栈指针 PSP
+  * 参    数：无
+  * 返 回 值：PSP 当前值
+  */
 __ASM uint32_t __get_PSP(void)
 {
   mrs r0, psp
@@ -69,6 +74,11 @@ __ASM uint32_t __get_PSP(void)
  * Assign the value ProcessStackPointer to the MSP 
  * (process stack pointer) Cortex processor register
  */
+/**
+  * 函    数：写入进程栈指针 PSP
+  * 参    数：topOfProcStack：要写入 PSP 的进程栈指针
+  * 返 回 值：无
+  */
 __ASM void __set_PSP(uint32_t topOfProcStack)
 {
   msr psp, r0
@@ -83,6 +93,11 @@ __ASM void __set_PSP(uint32_t topOfProcStack)
  * Return the current value of the MSP (main stack pointer)
  * Cortex processor register
  */
+/**
+  * 函    数：读取主栈指针 MSP
+  * 参    数：无
+  * 返 回 值：MSP 当前值
+  */
 __ASM uint32_t __get_MSP(void)
 {
   mrs r0, msp
@@ -97,6 +112,11 @@ __ASM uint32_t __get_MSP(void)
  * Assign the value mainStackPointer to the MSP 
  * (main stack pointer) Cortex processor register
  */
+/**
+  * 函    数：写入主栈指针 MSP
+  * 参    数：mainStackPointer：要写入 MSP 的主栈指针
+  * 返 回 值：无
+  */
 __ASM void __set_MSP(uint32_t mainStackPointer)
 {
   msr msp, r0
@@ -111,6 +131,11 @@ __ASM void __set_MSP(uint32_t mainStackPointer)
  *
  * Reverse byte order in unsigned short value
  */
+/**
+  * 函    数：在两个半字内部各自交换高低字节
+  * 参    数：value：要在半字内部交换字节的值
+  * 返 回 值：以 32 位类型返回字节交换结果
+  */
 __ASM uint32_t __REV16(uint16_t value)
 {
   rev16 r0, r0
@@ -125,6 +150,11 @@ __ASM uint32_t __REV16(uint16_t value)
  *
  * Reverse byte order in signed short value with sign extension to integer
  */
+/**
+  * 函    数：交换低 16 位的两个字节并做符号扩展
+  * 参    数：value：要交换字节并扩展的有符号 16 位值
+  * 返 回 值：符号扩展后的 32 位结果
+  */
 __ASM int32_t __REVSH(int16_t value)
 {
   revsh r0, r0
@@ -139,6 +169,11 @@ __ASM int32_t __REVSH(int16_t value)
  *
  * Removes the exclusive lock which is created by ldrex.
  */
+/**
+  * 函    数：清除内核本地独占访问标记
+  * 参    数：无
+  * 返 回 值：无
+  */
 __ASM void __CLREX(void)
 {
   clrex
@@ -151,6 +186,11 @@ __ASM void __CLREX(void)
  *
  * Return the content of the base priority register
  */
+/**
+  * 函    数：读取可屏蔽异常的优先级屏蔽阈值
+  * 参    数：无
+  * 返 回 值：BASEPRI 当前值，0 表示不设阈值
+  */
 __ASM uint32_t  __get_BASEPRI(void)
 {
   mrs r0, basepri
@@ -164,6 +204,11 @@ __ASM uint32_t  __get_BASEPRI(void)
  *
  * Set the base priority register
  */
+/**
+  * 函    数：设置可屏蔽异常的优先级屏蔽阈值
+  * 参    数：basePri：写入 BASEPRI 的优先级门限，0 表示关闭该屏蔽
+  * 返 回 值：无
+  */
 __ASM void __set_BASEPRI(uint32_t basePri)
 {
   msr basepri, r0
@@ -177,6 +222,11 @@ __ASM void __set_BASEPRI(uint32_t basePri)
  *
  * Return state of the priority mask bit from the priority mask register
  */
+/**
+  * 函    数：读取可配置优先级异常的全局屏蔽位
+  * 参    数：无
+  * 返 回 值：PRIMASK 当前值
+  */
 __ASM uint32_t __get_PRIMASK(void)
 {
   mrs r0, primask
@@ -190,6 +240,11 @@ __ASM uint32_t __get_PRIMASK(void)
  *
  * Set the priority mask bit in the priority mask register
  */
+/**
+  * 函    数：写入可配置优先级异常的全局屏蔽位
+  * 参    数：priMask：0 解除 PRIMASK 屏蔽，1 使能屏蔽
+  * 返 回 值：无
+  */
 __ASM void __set_PRIMASK(uint32_t priMask)
 {
   msr primask, r0
@@ -203,6 +258,11 @@ __ASM void __set_PRIMASK(uint32_t priMask)
  *
  * Return the content of the fault mask register
  */
+/**
+  * 函    数：读取 FAULTMASK 故障屏蔽位
+  * 参    数：无
+  * 返 回 值：FAULTMASK 当前值
+  */
 __ASM uint32_t  __get_FAULTMASK(void)
 {
   mrs r0, faultmask
@@ -216,6 +276,11 @@ __ASM uint32_t  __get_FAULTMASK(void)
  *
  * Set the fault mask register
  */
+/**
+  * 函    数：设置 FAULTMASK 故障屏蔽位
+  * 参    数：faultMask：0 解除 FAULTMASK 屏蔽，1 使能屏蔽
+  * 返 回 值：无
+  */
 __ASM void __set_FAULTMASK(uint32_t faultMask)
 {
   msr faultmask, r0
@@ -229,6 +294,11 @@ __ASM void __set_FAULTMASK(uint32_t faultMask)
  *
  * Return the content of the control register
  */
+/**
+  * 函    数：读取线程模式的栈选择和特权控制寄存器
+  * 参    数：无
+  * 返 回 值：CONTROL 当前值
+  */
 __ASM uint32_t __get_CONTROL(void)
 {
   mrs r0, control
@@ -242,6 +312,11 @@ __ASM uint32_t __get_CONTROL(void)
  *
  * Set the control register
  */
+/**
+  * 函    数：设置线程模式的栈选择和特权控制寄存器
+  * 参    数：control：要写入 CONTROL 的值，包括线程模式的栈选择和特权位
+  * 返 回 值：无
+  */
 __ASM void __set_CONTROL(uint32_t control)
 {
   msr control, r0
@@ -263,6 +338,11 @@ __ASM void __set_CONTROL(uint32_t control)
  *
  * Return the actual process stack pointer
  */
+/**
+  * 函    数：读取线程可使用的进程栈指针 PSP
+  * 参    数：无
+  * 返 回 值：PSP 当前值
+  */
 uint32_t __get_PSP(void)
 {
   __ASM("mrs r0, psp");
@@ -277,6 +357,11 @@ uint32_t __get_PSP(void)
  * Assign the value ProcessStackPointer to the MSP 
  * (process stack pointer) Cortex processor register
  */
+/**
+  * 函    数：写入进程栈指针 PSP
+  * 参    数：topOfProcStack：要写入 PSP 的进程栈指针
+  * 返 回 值：无
+  */
 void __set_PSP(uint32_t topOfProcStack)
 {
   __ASM("msr psp, r0");
@@ -291,6 +376,11 @@ void __set_PSP(uint32_t topOfProcStack)
  * Return the current value of the MSP (main stack pointer)
  * Cortex processor register
  */
+/**
+  * 函    数：读取主栈指针 MSP
+  * 参    数：无
+  * 返 回 值：MSP 当前值
+  */
 uint32_t __get_MSP(void)
 {
   __ASM("mrs r0, msp");
@@ -305,6 +395,11 @@ uint32_t __get_MSP(void)
  * Assign the value mainStackPointer to the MSP 
  * (main stack pointer) Cortex processor register
  */
+/**
+  * 函    数：写入主栈指针 MSP
+  * 参    数：topOfMainStack：要写入 MSP 的主栈指针
+  * 返 回 值：无
+  */
 void __set_MSP(uint32_t topOfMainStack)
 {
   __ASM("msr msp, r0");
@@ -319,6 +414,11 @@ void __set_MSP(uint32_t topOfMainStack)
  *
  * Reverse byte order in unsigned short value
  */
+/**
+  * 函    数：在两个半字内部各自交换高低字节
+  * 参    数：value：要在半字内部交换字节的值
+  * 返 回 值：以 32 位类型返回字节交换结果
+  */
 uint32_t __REV16(uint16_t value)
 {
   __ASM("rev16 r0, r0");
@@ -333,6 +433,11 @@ uint32_t __REV16(uint16_t value)
  *
  * Reverse bit order of value
  */
+/**
+  * 函    数：反转 32 位值的位顺序
+  * 参    数：value：要反转位顺序的 32 位值
+  * 返 回 值：位顺序反转后的 32 位值
+  */
 uint32_t __RBIT(uint32_t value)
 {
   __ASM("rbit r0, r0");
@@ -347,6 +452,11 @@ uint32_t __RBIT(uint32_t value)
  *
  * Exclusive LDR command for 8 bit values)
  */
+/**
+  * 函    数：以独占访问方式读取一个 8 位值
+  * 参    数：addr：访问地址，须按访问宽度对齐
+  * 返 回 值：从指定地址读出的 8 位值
+  */
 uint8_t __LDREXB(uint8_t *addr)
 {
   __ASM("ldrexb r0, [r0]");
@@ -361,6 +471,11 @@ uint8_t __LDREXB(uint8_t *addr)
  *
  * Exclusive LDR command for 16 bit values
  */
+/**
+  * 函    数：以独占访问方式读取一个 16 位值
+  * 参    数：addr：访问地址，须按访问宽度对齐
+  * 返 回 值：从指定地址读出的 16 位值
+  */
 uint16_t __LDREXH(uint16_t *addr)
 {
   __ASM("ldrexh r0, [r0]");
@@ -375,6 +490,11 @@ uint16_t __LDREXH(uint16_t *addr)
  *
  * Exclusive LDR command for 32 bit values
  */
+/**
+  * 函    数：以独占访问方式读取一个 32 位值
+  * 参    数：addr：访问地址，须按访问宽度对齐
+  * 返 回 值：从指定地址读出的 32 位值
+  */
 uint32_t __LDREXW(uint32_t *addr)
 {
   __ASM("ldrex r0, [r0]");
@@ -390,6 +510,12 @@ uint32_t __LDREXW(uint32_t *addr)
  *
  * Exclusive STR command for 8 bit values
  */
+/**
+  * 函    数：独占写入一个 8 位值
+  * 参    数：value：要写入的 8 位值
+  *           addr：访问地址，须按访问宽度对齐
+  * 返 回 值：0 表示写入成功，1 表示独占条件失效
+  */
 uint32_t __STREXB(uint8_t value, uint8_t *addr)
 {
   __ASM("strexb r0, r0, [r1]");
@@ -405,6 +531,12 @@ uint32_t __STREXB(uint8_t value, uint8_t *addr)
  *
  * Exclusive STR command for 16 bit values
  */
+/**
+  * 函    数：独占写入一个 16 位值
+  * 参    数：value：要写入的 16 位值
+  *           addr：访问地址，须按访问宽度对齐
+  * 返 回 值：0 表示写入成功，1 表示独占条件失效
+  */
 uint32_t __STREXH(uint16_t value, uint16_t *addr)
 {
   __ASM("strexh r0, r0, [r1]");
@@ -420,6 +552,12 @@ uint32_t __STREXH(uint16_t value, uint16_t *addr)
  *
  * Exclusive STR command for 32 bit values
  */
+/**
+  * 函    数：独占写入一个 32 位值
+  * 参    数：value：要写入的 32 位值
+  *           addr：访问地址，须按访问宽度对齐
+  * 返 回 值：0 表示写入成功，1 表示独占条件失效
+  */
 uint32_t __STREXW(uint32_t value, uint32_t *addr)
 {
   __ASM("strex r0, r0, [r1]");
@@ -440,6 +578,11 @@ uint32_t __STREXW(uint32_t value, uint32_t *addr)
  * Return the actual process stack pointer
  */
 uint32_t __get_PSP(void) __attribute__( ( naked ) );
+/**
+  * 函    数：读取线程可使用的进程栈指针 PSP
+  * 参    数：无
+  * 返 回 值：PSP 当前值
+  */
 uint32_t __get_PSP(void)
 {
   uint32_t result=0;
@@ -459,6 +602,11 @@ uint32_t __get_PSP(void)
  * (process stack pointer) Cortex processor register
  */
 void __set_PSP(uint32_t topOfProcStack) __attribute__( ( naked ) );
+/**
+  * 函    数：写入进程栈指针 PSP
+  * 参    数：topOfProcStack：要写入 PSP 的进程栈指针
+  * 返 回 值：无
+  */
 void __set_PSP(uint32_t topOfProcStack)
 {
   __ASM volatile ("MSR psp, %0\n\t"
@@ -474,6 +622,11 @@ void __set_PSP(uint32_t topOfProcStack)
  * Cortex processor register
  */
 uint32_t __get_MSP(void) __attribute__( ( naked ) );
+/**
+  * 函    数：读取主栈指针 MSP
+  * 参    数：无
+  * 返 回 值：MSP 当前值
+  */
 uint32_t __get_MSP(void)
 {
   uint32_t result=0;
@@ -493,6 +646,11 @@ uint32_t __get_MSP(void)
  * (main stack pointer) Cortex processor register
  */
 void __set_MSP(uint32_t topOfMainStack) __attribute__( ( naked ) );
+/**
+  * 函    数：写入主栈指针 MSP
+  * 参    数：topOfMainStack：要写入 MSP 的主栈指针
+  * 返 回 值：无
+  */
 void __set_MSP(uint32_t topOfMainStack)
 {
   __ASM volatile ("MSR msp, %0\n\t"
@@ -506,6 +664,11 @@ void __set_MSP(uint32_t topOfMainStack)
  *
  * Return the content of the base priority register
  */
+/**
+  * 函    数：读取可屏蔽异常的优先级屏蔽阈值
+  * 参    数：无
+  * 返 回 值：BASEPRI 当前值，0 表示不设阈值
+  */
 uint32_t __get_BASEPRI(void)
 {
   uint32_t result=0;
@@ -521,6 +684,11 @@ uint32_t __get_BASEPRI(void)
  *
  * Set the base priority register
  */
+/**
+  * 函    数：设置可屏蔽异常的优先级屏蔽阈值
+  * 参    数：value：写入 BASEPRI 的优先级门限，0 表示关闭该屏蔽
+  * 返 回 值：无
+  */
 void __set_BASEPRI(uint32_t value)
 {
   __ASM volatile ("MSR basepri, %0" : : "r" (value) );
@@ -533,6 +701,11 @@ void __set_BASEPRI(uint32_t value)
  *
  * Return state of the priority mask bit from the priority mask register
  */
+/**
+  * 函    数：读取可配置优先级异常的全局屏蔽位
+  * 参    数：无
+  * 返 回 值：PRIMASK 当前值
+  */
 uint32_t __get_PRIMASK(void)
 {
   uint32_t result=0;
@@ -548,6 +721,11 @@ uint32_t __get_PRIMASK(void)
  *
  * Set the priority mask bit in the priority mask register
  */
+/**
+  * 函    数：写入可配置优先级异常的全局屏蔽位
+  * 参    数：priMask：0 解除 PRIMASK 屏蔽，1 使能屏蔽
+  * 返 回 值：无
+  */
 void __set_PRIMASK(uint32_t priMask)
 {
   __ASM volatile ("MSR primask, %0" : : "r" (priMask) );
@@ -560,6 +738,11 @@ void __set_PRIMASK(uint32_t priMask)
  *
  * Return the content of the fault mask register
  */
+/**
+  * 函    数：读取 FAULTMASK 故障屏蔽位
+  * 参    数：无
+  * 返 回 值：FAULTMASK 当前值
+  */
 uint32_t __get_FAULTMASK(void)
 {
   uint32_t result=0;
@@ -575,6 +758,11 @@ uint32_t __get_FAULTMASK(void)
  *
  * Set the fault mask register
  */
+/**
+  * 函    数：设置 FAULTMASK 故障屏蔽位
+  * 参    数：faultMask：0 解除 FAULTMASK 屏蔽，1 使能屏蔽
+  * 返 回 值：无
+  */
 void __set_FAULTMASK(uint32_t faultMask)
 {
   __ASM volatile ("MSR faultmask, %0" : : "r" (faultMask) );
@@ -587,6 +775,11 @@ void __set_FAULTMASK(uint32_t faultMask)
  *
  * Return the content of the control register
  */
+/**
+  * 函    数：读取线程模式的栈选择和特权控制寄存器
+  * 参    数：无
+  * 返 回 值：CONTROL 当前值
+  */
 uint32_t __get_CONTROL(void)
 {
   uint32_t result=0;
@@ -602,6 +795,11 @@ uint32_t __get_CONTROL(void)
  *
  * Set the control register
  */
+/**
+  * 函    数：设置线程模式的栈选择和特权控制寄存器
+  * 参    数：control：要写入 CONTROL 的值，包括线程模式的栈选择和特权位
+  * 返 回 值：无
+  */
 void __set_CONTROL(uint32_t control)
 {
   __ASM volatile ("MSR control, %0" : : "r" (control) );
@@ -616,6 +814,11 @@ void __set_CONTROL(uint32_t control)
  *
  * Reverse byte order in integer value
  */
+/**
+  * 函    数：反转 32 位值中四个字节的位置
+  * 参    数：value：要交换字节顺序的 32 位值
+  * 返 回 值：字节序反转后的 32 位无符号值
+  */
 uint32_t __REV(uint32_t value)
 {
   uint32_t result=0;
@@ -632,6 +835,11 @@ uint32_t __REV(uint32_t value)
  *
  * Reverse byte order in unsigned short value
  */
+/**
+  * 函    数：在两个半字内部各自交换高低字节
+  * 参    数：value：要在半字内部交换字节的值
+  * 返 回 值：以 32 位类型返回字节交换结果
+  */
 uint32_t __REV16(uint16_t value)
 {
   uint32_t result=0;
@@ -648,6 +856,11 @@ uint32_t __REV16(uint16_t value)
  *
  * Reverse byte order in signed short value with sign extension to integer
  */
+/**
+  * 函    数：交换低 16 位的两个字节并做符号扩展
+  * 参    数：value：要交换字节并扩展的有符号 16 位值
+  * 返 回 值：符号扩展后的 32 位结果
+  */
 int32_t __REVSH(int16_t value)
 {
   uint32_t result=0;
@@ -664,6 +877,11 @@ int32_t __REVSH(int16_t value)
  *
  * Reverse bit order of value
  */
+/**
+  * 函    数：反转 32 位值的位顺序
+  * 参    数：value：要反转位顺序的 32 位值
+  * 返 回 值：位顺序反转后的 32 位值
+  */
 uint32_t __RBIT(uint32_t value)
 {
   uint32_t result=0;
@@ -680,6 +898,11 @@ uint32_t __RBIT(uint32_t value)
  *
  * Exclusive LDR command for 8 bit value
  */
+/**
+  * 函    数：以独占访问方式读取一个 8 位值
+  * 参    数：addr：访问地址，须按访问宽度对齐
+  * 返 回 值：从指定地址读出的 8 位值
+  */
 uint8_t __LDREXB(uint8_t *addr)
 {
     uint8_t result=0;
@@ -696,6 +919,11 @@ uint8_t __LDREXB(uint8_t *addr)
  *
  * Exclusive LDR command for 16 bit values
  */
+/**
+  * 函    数：以独占访问方式读取一个 16 位值
+  * 参    数：addr：访问地址，须按访问宽度对齐
+  * 返 回 值：从指定地址读出的 16 位值
+  */
 uint16_t __LDREXH(uint16_t *addr)
 {
     uint16_t result=0;
@@ -712,6 +940,11 @@ uint16_t __LDREXH(uint16_t *addr)
  *
  * Exclusive LDR command for 32 bit values
  */
+/**
+  * 函    数：以独占访问方式读取一个 32 位值
+  * 参    数：addr：访问地址，须按访问宽度对齐
+  * 返 回 值：从指定地址读出的 32 位值
+  */
 uint32_t __LDREXW(uint32_t *addr)
 {
     uint32_t result=0;
@@ -729,6 +962,12 @@ uint32_t __LDREXW(uint32_t *addr)
  *
  * Exclusive STR command for 8 bit values
  */
+/**
+  * 函    数：独占写入一个 8 位值
+  * 参    数：value：要写入的 8 位值
+  *           addr：访问地址，须按访问宽度对齐
+  * 返 回 值：0 表示写入成功，1 表示独占条件失效
+  */
 uint32_t __STREXB(uint8_t value, uint8_t *addr)
 {
    uint32_t result=0;
@@ -746,6 +985,12 @@ uint32_t __STREXB(uint8_t value, uint8_t *addr)
  *
  * Exclusive STR command for 16 bit values
  */
+/**
+  * 函    数：独占写入一个 16 位值
+  * 参    数：value：要写入的 16 位值
+  *           addr：访问地址，须按访问宽度对齐
+  * 返 回 值：0 表示写入成功，1 表示独占条件失效
+  */
 uint32_t __STREXH(uint16_t value, uint16_t *addr)
 {
    uint32_t result=0;
@@ -763,6 +1008,12 @@ uint32_t __STREXH(uint16_t value, uint16_t *addr)
  *
  * Exclusive STR command for 32 bit values
  */
+/**
+  * 函    数：独占写入一个 32 位值
+  * 参    数：value：要写入的 32 位值
+  *           addr：访问地址，须按访问宽度对齐
+  * 返 回 值：0 表示写入成功，1 表示独占条件失效
+  */
 uint32_t __STREXW(uint32_t value, uint32_t *addr)
 {
    uint32_t result=0;

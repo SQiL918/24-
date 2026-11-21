@@ -112,7 +112,7 @@
 /* #define SYSCLK_FREQ_36MHz  36000000 */
 /* #define SYSCLK_FREQ_48MHz  48000000 */
 /* #define SYSCLK_FREQ_56MHz  56000000 */
-#define SYSCLK_FREQ_72MHz  72000000
+#define SYSCLK_FREQ_72MHz  72000000                 // 当前 STM32F103 中容量目标选择 72 MHz
 #endif
 
 /*!< Uncomment the following line if you need to use external SRAM mounted
@@ -209,15 +209,20 @@ static void SetSysClock(void);
   * @param  None
   * @retval None
   */
+/**
+  * 函    数：复位系统时钟寄存器并建立时钟和向量表配置
+  * 参    数：无
+  * 返 回 值：无
+  */
 void SystemInit (void)
 {
   /* Reset the RCC clock configuration to the default reset state(for debug purpose) */
   /* Set HSION bit */
-  RCC->CR |= (uint32_t)0x00000001;
+  RCC->CR |= (uint32_t)0x00000001;                  // 确保复位后的 HSI 已开启，再重新配置时钟
 
   /* Reset SW, HPRE, PPRE1, PPRE2, ADCPRE and MCO bits */
 #ifndef STM32F10X_CL
-  RCC->CFGR &= (uint32_t)0xF8FF0000;
+  RCC->CFGR &= (uint32_t)0xF8FF0000;                // 当前目标为非互联型，恢复各总线与系统时钟选择
 #else
   RCC->CFGR &= (uint32_t)0xF0FF0000;
 #endif /* STM32F10X_CL */   
@@ -248,7 +253,7 @@ void SystemInit (void)
   RCC->CFGR2 = 0x00000000;      
 #else
   /* Disable all interrupts and clear pending bits  */
-  RCC->CIR = 0x009F0000;
+  RCC->CIR = 0x009F0000;                            // 关闭 RCC 中断并清除挂起标志
 #endif /* STM32F10X_CL */
     
 #if defined (STM32F10X_HD) || (defined STM32F10X_XL) || (defined STM32F10X_HD_VL)
@@ -259,11 +264,12 @@ void SystemInit (void)
 
   /* Configure the System clock frequency, HCLK, PCLK2 and PCLK1 prescalers */
   /* Configure the Flash Latency cycles and enable prefetch buffer */
-  SetSysClock();
+  SetSysClock();                                    // 按编译选项建立系统时钟、总线分频与 Flash 等待周期
 
 #ifdef VECT_TAB_SRAM
   SCB->VTOR = SRAM_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM. */
 #else
+  /* 本工程通常从内部 Flash 启动，向量表放在 Flash 基址加偏移。 */
   SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH. */
 #endif 
 }
@@ -303,6 +309,11 @@ void SystemInit (void)
   * @param  None
   * @retval None
   */
+/**
+  * 函    数：读取 RCC 配置并重新计算 SystemCoreClock
+  * 参    数：无
+  * 返 回 值：无
+  */
 void SystemCoreClockUpdate (void)
 {
   uint32_t tmp = 0, pllmull = 0, pllsource = 0;
@@ -316,7 +327,7 @@ void SystemCoreClockUpdate (void)
 #endif /* STM32F10X_LD_VL or STM32F10X_MD_VL or STM32F10X_HD_VL */
     
   /* Get SYSCLK source -------------------------------------------------------*/
-  tmp = RCC->CFGR & RCC_CFGR_SWS;
+  tmp = RCC->CFGR & RCC_CFGR_SWS;                   // 读取 SWS 实际使用的时钟源，区别于请求值 SW
   
   switch (tmp)
   {
@@ -333,7 +344,7 @@ void SystemCoreClockUpdate (void)
       pllsource = RCC->CFGR & RCC_CFGR_PLLSRC;
       
 #ifndef STM32F10X_CL      
-      pllmull = ( pllmull >> 18) + 2;
+      pllmull = ( pllmull >> 18) + 2;               // 把 PLL 字段编码还原成倍频系数
       
       if (pllsource == 0x00)
       {
@@ -406,15 +417,20 @@ void SystemCoreClockUpdate (void)
   
   /* Compute HCLK clock frequency ----------------*/
   /* Get HCLK prescaler */
-  tmp = AHBPrescTable[((RCC->CFGR & RCC_CFGR_HPRE) >> 4)];
+  tmp = AHBPrescTable[((RCC->CFGR & RCC_CFGR_HPRE) >> 4)];  // 根据 AHB 分频编码取得计算 HCLK 的移位数
   /* HCLK clock frequency */
-  SystemCoreClock >>= tmp;  
+  SystemCoreClock >>= tmp;                          // 将算出的 SYSCLK 按 AHB 分频折算为内核时钟
 }
 
 /**
   * @brief  Configures the System clock frequency, HCLK, PCLK2 and PCLK1 prescalers.
   * @param  None
   * @retval None
+  */
+/**
+  * 函    数：按编译期频率选项调用相应的系统时钟设置函数
+  * 参    数：无
+  * 返 回 值：无
   */
 static void SetSysClock(void)
 {
@@ -429,7 +445,7 @@ static void SetSysClock(void)
 #elif defined SYSCLK_FREQ_56MHz
   SetSysClockTo56();  
 #elif defined SYSCLK_FREQ_72MHz
-  SetSysClockTo72();
+  SetSysClockTo72();                                // 当前 Keil 目标调用 72 MHz 配置分支
 #endif
  
  /* If none of the define above is enabled, the HSI is used as System clock
@@ -452,6 +468,11 @@ static void SetSysClock(void)
   * @param  None
   * @retval None
   */ 
+/**
+  * 函    数：初始化启用外部 SRAM 时使用的 FSMC 及其 GPIO
+  * 参    数：无
+  * 返 回 值：无
+  */
 void SystemInit_ExtMemCtl(void) 
 {
 /*!< FSMC Bank1 NOR/SRAM3 is used for the STM3210E-EVAL, if another Bank is 
@@ -496,6 +517,11 @@ void SystemInit_ExtMemCtl(void)
   * @note   This function should be used only after reset.
   * @param  None
   * @retval None
+  */
+/**
+  * 函    数：尝试启动 HSE 并直接用它作系统时钟
+  * 参    数：无
+  * 返 回 值：无
   */
 static void SetSysClockToHSE(void)
 {
@@ -575,6 +601,11 @@ static void SetSysClockToHSE(void)
   * @note   This function should be used only after reset.
   * @param  None
   * @retval None
+  */
+/**
+  * 函    数：尝试建立 24 MHz 系统时钟
+  * 参    数：无
+  * 返 回 值：无
   */
 static void SetSysClockTo24(void)
 {
@@ -680,6 +711,11 @@ static void SetSysClockTo24(void)
   * @param  None
   * @retval None
   */
+/**
+  * 函    数：尝试建立 36 MHz 系统时钟
+  * 参    数：无
+  * 返 回 值：无
+  */
 static void SetSysClockTo36(void)
 {
   __IO uint32_t StartUpCounter = 0, HSEStatus = 0;
@@ -781,6 +817,11 @@ static void SetSysClockTo36(void)
   * @param  None
   * @retval None
   */
+/**
+  * 函    数：尝试建立 48 MHz 系统时钟
+  * 参    数：无
+  * 返 回 值：无
+  */
 static void SetSysClockTo48(void)
 {
   __IO uint32_t StartUpCounter = 0, HSEStatus = 0;
@@ -881,6 +922,11 @@ static void SetSysClockTo48(void)
   * @note   This function should be used only after reset.
   * @param  None
   * @retval None
+  */
+/**
+  * 函    数：尝试建立 56 MHz 系统时钟
+  * 参    数：无
+  * 返 回 值：无
   */
 static void SetSysClockTo56(void)
 {
@@ -984,18 +1030,23 @@ static void SetSysClockTo56(void)
   * @param  None
   * @retval None
   */
+/**
+  * 函    数：尝试建立本工程使用的 72 MHz 系统时钟
+  * 参    数：无
+  * 返 回 值：无
+  */
 static void SetSysClockTo72(void)
 {
   __IO uint32_t StartUpCounter = 0, HSEStatus = 0;
   
   /* SYSCLK, HCLK, PCLK2 and PCLK1 configuration ---------------------------*/    
   /* Enable HSE */    
-  RCC->CR |= ((uint32_t)RCC_CR_HSEON);
+  RCC->CR |= ((uint32_t)RCC_CR_HSEON);              // 开启外部高速晶振
  
   /* Wait till HSE is ready and if Time out is reached exit */
   do
   {
-    HSEStatus = RCC->CR & RCC_CR_HSERDY;
+    HSEStatus = RCC->CR & RCC_CR_HSERDY;            // 等待外部晶振就绪，受 HSE_STARTUP_TIMEOUT 限制
     StartUpCounter++;  
   } while((HSEStatus == 0) && (StartUpCounter != HSE_STARTUP_TIMEOUT));
 
@@ -1011,21 +1062,21 @@ static void SetSysClockTo72(void)
   if (HSEStatus == (uint32_t)0x01)
   {
     /* Enable Prefetch Buffer */
-    FLASH->ACR |= FLASH_ACR_PRFTBE;
+    FLASH->ACR |= FLASH_ACR_PRFTBE;                 // 启用 Flash 指令预取
 
     /* Flash 2 wait state */
     FLASH->ACR &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
-    FLASH->ACR |= (uint32_t)FLASH_ACR_LATENCY_2;    
+    FLASH->ACR |= (uint32_t)FLASH_ACR_LATENCY_2;    // 72 MHz 时使用两个 Flash 等待周期
 
  
     /* HCLK = SYSCLK */
-    RCC->CFGR |= (uint32_t)RCC_CFGR_HPRE_DIV1;
+    RCC->CFGR |= (uint32_t)RCC_CFGR_HPRE_DIV1;      // AHB 不分频，HCLK 为 72 MHz
       
     /* PCLK2 = HCLK */
-    RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE2_DIV1;
+    RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE2_DIV1;     // APB2 不分频，PCLK2 为 72 MHz
     
     /* PCLK1 = HCLK */
-    RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE1_DIV2;
+    RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE1_DIV2;     // APB1 二分频，PCLK1 为 36 MHz
 
 #ifdef STM32F10X_CL
     /* Configure PLLs ------------------------------------------------------*/
@@ -1053,23 +1104,23 @@ static void SetSysClockTo72(void)
     /*  PLL configuration: PLLCLK = HSE * 9 = 72 MHz */
     RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE |
                                         RCC_CFGR_PLLMULL));
-    RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_HSE | RCC_CFGR_PLLMULL9);
+    RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_HSE | RCC_CFGR_PLLMULL9);  // 当前器件的 8 MHz HSE 经 PLL 九倍频得到 72 MHz
 #endif /* STM32F10X_CL */
 
     /* Enable PLL */
-    RCC->CR |= RCC_CR_PLLON;
+    RCC->CR |= RCC_CR_PLLON;                        // 启动主 PLL
 
     /* Wait till PLL is ready */
-    while((RCC->CR & RCC_CR_PLLRDY) == 0)
+    while((RCC->CR & RCC_CR_PLLRDY) == 0)           // 等待 PLL 锁定后再切换系统时钟
     {
     }
     
     /* Select PLL as system clock source */
     RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
-    RCC->CFGR |= (uint32_t)RCC_CFGR_SW_PLL;    
+    RCC->CFGR |= (uint32_t)RCC_CFGR_SW_PLL;         // 请求把 PLL 作为系统时钟源
 
     /* Wait till PLL is used as system clock source */
-    while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != (uint32_t)0x08)
+    while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != (uint32_t)0x08)  // 等到 SWS 确认已切换至 PLL
     {
     }
   }

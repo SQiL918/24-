@@ -945,6 +945,11 @@ extern void __set_CONTROL(uint32_t control);
  *
  * Return the content of the base priority register
  */
+/**
+  * 函    数：读取可屏蔽异常的优先级屏蔽阈值
+  * 参    数：无
+  * 返 回 值：BASEPRI 当前值，0 表示不设阈值
+  */
 static __INLINE uint32_t  __get_BASEPRI(void)
 {
   register uint32_t __regBasePri         __ASM("basepri");
@@ -958,6 +963,11 @@ static __INLINE uint32_t  __get_BASEPRI(void)
  *
  * Set the base priority register
  */
+/**
+  * 函    数：设置可屏蔽异常的优先级屏蔽阈值
+  * 参    数：basePri：写入 BASEPRI 的优先级门限，0 表示关闭该屏蔽
+  * 返 回 值：无
+  */
 static __INLINE void __set_BASEPRI(uint32_t basePri)
 {
   register uint32_t __regBasePri         __ASM("basepri");
@@ -971,6 +981,11 @@ static __INLINE void __set_BASEPRI(uint32_t basePri)
  *
  * Return state of the priority mask bit from the priority mask register
  */
+/**
+  * 函    数：读取可配置优先级异常的全局屏蔽位
+  * 参    数：无
+  * 返 回 值：PRIMASK 当前值
+  */
 static __INLINE uint32_t __get_PRIMASK(void)
 {
   register uint32_t __regPriMask         __ASM("primask");
@@ -984,6 +999,11 @@ static __INLINE uint32_t __get_PRIMASK(void)
  *
  * Set the priority mask bit in the priority mask register
  */
+/**
+  * 函    数：写入可配置优先级异常的全局屏蔽位
+  * 参    数：priMask：0 解除 PRIMASK 屏蔽，1 使能屏蔽
+  * 返 回 值：无
+  */
 static __INLINE void __set_PRIMASK(uint32_t priMask)
 {
   register uint32_t __regPriMask         __ASM("primask");
@@ -997,6 +1017,11 @@ static __INLINE void __set_PRIMASK(uint32_t priMask)
  *
  * Return the content of the fault mask register
  */
+/**
+  * 函    数：读取 FAULTMASK 故障屏蔽位
+  * 参    数：无
+  * 返 回 值：FAULTMASK 当前值
+  */
 static __INLINE uint32_t __get_FAULTMASK(void)
 {
   register uint32_t __regFaultMask       __ASM("faultmask");
@@ -1010,6 +1035,11 @@ static __INLINE uint32_t __get_FAULTMASK(void)
  *
  * Set the fault mask register
  */
+/**
+  * 函    数：设置 FAULTMASK 故障屏蔽位
+  * 参    数：faultMask：0 解除 FAULTMASK 屏蔽，1 使能屏蔽
+  * 返 回 值：无
+  */
 static __INLINE void __set_FAULTMASK(uint32_t faultMask)
 {
   register uint32_t __regFaultMask       __ASM("faultmask");
@@ -1023,6 +1053,11 @@ static __INLINE void __set_FAULTMASK(uint32_t faultMask)
  *
  * Return the content of the control register
  */
+/**
+  * 函    数：读取线程模式的栈选择和特权控制寄存器
+  * 参    数：无
+  * 返 回 值：CONTROL 当前值
+  */
 static __INLINE uint32_t __get_CONTROL(void)
 {
   register uint32_t __regControl         __ASM("control");
@@ -1036,6 +1071,11 @@ static __INLINE uint32_t __get_CONTROL(void)
  *
  * Set the control register
  */
+/**
+  * 函    数：设置线程模式的栈选择和特权控制寄存器
+  * 参    数：control：要写入 CONTROL 的值，包括线程模式的栈选择和特权位
+  * 返 回 值：无
+  */
 static __INLINE void __set_CONTROL(uint32_t control)
 {
   register uint32_t __regControl         __ASM("control");
@@ -1052,13 +1092,43 @@ static __INLINE void __set_CONTROL(uint32_t control)
 #define __enable_irq                              __enable_interrupt        /*!< global Interrupt enable */
 #define __disable_irq                             __disable_interrupt       /*!< global Interrupt disable */
 
+/**
+  * 函    数：清除 FAULTMASK，解除该寄存器施加的异常屏蔽
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE void __enable_fault_irq()         { __ASM ("cpsie f"); }
+/**
+  * 函    数：设置 FAULTMASK，屏蔽除 NMI 外的异常
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE void __disable_fault_irq()        { __ASM ("cpsid f"); }
 
 #define __NOP                                     __no_operation            /*!< no operation intrinsic in IAR Compiler */ 
+/**
+  * 函    数：等待中断等唤醒条件
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE  void __WFI()                     { __ASM ("wfi"); }
+/**
+  * 函    数：等待事件等唤醒条件
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE  void __WFE()                     { __ASM ("wfe"); }
+/**
+  * 函    数：发送事件信号以通知等待事件的内核
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE  void __SEV()                     { __ASM ("sev"); }
+/**
+  * 函    数：清除内核本地独占访问标记
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE  void __CLREX()                   { __ASM ("clrex"); }
 
 /* intrinsic void __ISB(void)                                     */
@@ -1201,19 +1271,79 @@ extern uint32_t __STREXW(uint32_t value, uint32_t *addr);
 #elif (defined (__GNUC__)) /*------------------ GNU Compiler ---------------------*/
 /* GNU gcc specific functions */
 
+/**
+  * 函    数：清除 PRIMASK，解除普通可屏蔽异常的全局屏蔽
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE void __enable_irq()               { __ASM volatile ("cpsie i"); }
+/**
+  * 函    数：设置 PRIMASK，屏蔽可配置优先级的异常
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE void __disable_irq()              { __ASM volatile ("cpsid i"); }
 
+/**
+  * 函    数：清除 FAULTMASK，解除该寄存器施加的异常屏蔽
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE void __enable_fault_irq()         { __ASM volatile ("cpsie f"); }
+/**
+  * 函    数：设置 FAULTMASK，屏蔽除 NMI 外的异常
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE void __disable_fault_irq()        { __ASM volatile ("cpsid f"); }
 
+/**
+  * 函    数：执行一条空操作指令
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE void __NOP()                      { __ASM volatile ("nop"); }
+/**
+  * 函    数：等待中断等唤醒条件
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE void __WFI()                      { __ASM volatile ("wfi"); }
+/**
+  * 函    数：等待事件等唤醒条件
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE void __WFE()                      { __ASM volatile ("wfe"); }
+/**
+  * 函    数：发送事件信号以通知等待事件的内核
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE void __SEV()                      { __ASM volatile ("sev"); }
+/**
+  * 函    数：刷新指令流水线，使后续指令在更新后的上下文中执行
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE void __ISB()                      { __ASM volatile ("isb"); }
+/**
+  * 函    数：等待屏障前的显式内存访问完成
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE void __DSB()                      { __ASM volatile ("dsb"); }
+/**
+  * 函    数：对屏障前后的显式内存访问建立顺序约束
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE void __DMB()                      { __ASM volatile ("dmb"); }
+/**
+  * 函    数：清除内核本地独占访问标记
+  * 参    数：无
+  * 返 回 值：无
+  */
 static __INLINE void __CLREX()                    { __ASM volatile ("clrex"); }
 
 
@@ -1465,6 +1595,11 @@ extern uint32_t __STREXW(uint32_t value, uint32_t *addr);
  * In case of a conflict between priority grouping and available
  * priority bits (__NVIC_PRIO_BITS) the smallest possible priority group is set.
  */
+/**
+  * 函    数：配置 AIRCR 中的中断优先级分组
+  * 参    数：PriorityGroup：AIRCR.PRIGROUP 值，低 3 位有效
+  * 返 回 值：无
+  */
 static __INLINE void NVIC_SetPriorityGrouping(uint32_t PriorityGroup)
 {
   uint32_t reg_value;
@@ -1486,6 +1621,11 @@ static __INLINE void NVIC_SetPriorityGrouping(uint32_t PriorityGroup)
  * Get the priority grouping from NVIC Interrupt Controller.
  * priority grouping is SCB->AIRCR [10:8] PRIGROUP field.
  */
+/**
+  * 函    数：读取 AIRCR 中的中断优先级分组
+  * 参    数：无
+  * 返 回 值：当前优先级分组值
+  */
 static __INLINE uint32_t NVIC_GetPriorityGrouping(void)
 {
   return ((SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) >> SCB_AIRCR_PRIGROUP_Pos);   /* read priority grouping field */
@@ -1499,6 +1639,11 @@ static __INLINE uint32_t NVIC_GetPriorityGrouping(void)
  * Enable a device specific interupt in the NVIC interrupt controller.
  * The interrupt number cannot be a negative value.
  */
+/**
+  * 函    数：使能指定的外部中断通道
+  * 参    数：IRQn：中断编号，优先级接口也支持可设置优先级的系统异常
+  * 返 回 值：无
+  */
 static __INLINE void NVIC_EnableIRQ(IRQn_Type IRQn)
 {
   NVIC->ISER[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F)); /* enable interrupt */
@@ -1512,6 +1657,11 @@ static __INLINE void NVIC_EnableIRQ(IRQn_Type IRQn)
  * Disable a device specific interupt in the NVIC interrupt controller.
  * The interrupt number cannot be a negative value.
  */
+/**
+  * 函    数：关闭指定的外部中断通道
+  * 参    数：IRQn：中断编号，优先级接口也支持可设置优先级的系统异常
+  * 返 回 值：无
+  */
 static __INLINE void NVIC_DisableIRQ(IRQn_Type IRQn)
 {
   NVIC->ICER[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F)); /* disable interrupt */
@@ -1526,6 +1676,11 @@ static __INLINE void NVIC_DisableIRQ(IRQn_Type IRQn)
  * Read the pending register in NVIC and return 1 if its status is pending, 
  * otherwise it returns 0
  */
+/**
+  * 函    数：查询一个外部中断通道是否挂起
+  * 参    数：IRQn：中断编号，优先级接口也支持可设置优先级的系统异常
+  * 返 回 值：1 表示挂起，0 表示未挂起
+  */
 static __INLINE uint32_t NVIC_GetPendingIRQ(IRQn_Type IRQn)
 {
   return((uint32_t) ((NVIC->ISPR[(uint32_t)(IRQn) >> 5] & (1 << ((uint32_t)(IRQn) & 0x1F)))?1:0)); /* Return 1 if pending else 0 */
@@ -1539,6 +1694,11 @@ static __INLINE uint32_t NVIC_GetPendingIRQ(IRQn_Type IRQn)
  * Set the pending bit for the specified interrupt.
  * The interrupt number cannot be a negative value.
  */
+/**
+  * 函    数：将指定外部中断通道置为挂起
+  * 参    数：IRQn：中断编号，优先级接口也支持可设置优先级的系统异常
+  * 返 回 值：无
+  */
 static __INLINE void NVIC_SetPendingIRQ(IRQn_Type IRQn)
 {
   NVIC->ISPR[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F)); /* set interrupt pending */
@@ -1552,6 +1712,11 @@ static __INLINE void NVIC_SetPendingIRQ(IRQn_Type IRQn)
  * Clear the pending bit for the specified interrupt. 
  * The interrupt number cannot be a negative value.
  */
+/**
+  * 函    数：清除指定外部中断通道的挂起状态
+  * 参    数：IRQn：中断编号，优先级接口也支持可设置优先级的系统异常
+  * 返 回 值：无
+  */
 static __INLINE void NVIC_ClearPendingIRQ(IRQn_Type IRQn)
 {
   NVIC->ICPR[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F)); /* Clear pending interrupt */
@@ -1566,6 +1731,11 @@ static __INLINE void NVIC_ClearPendingIRQ(IRQn_Type IRQn)
  * Read the active register in NVIC and returns 1 if its status is active, 
  * otherwise it returns 0.
  */
+/**
+  * 函    数：查询一个外部中断通道是否处于活动状态
+  * 参    数：IRQn：中断编号，优先级接口也支持可设置优先级的系统异常
+  * 返 回 值：1 表示正在处理，0 表示未活动
+  */
 static __INLINE uint32_t NVIC_GetActive(IRQn_Type IRQn)
 {
   return((uint32_t)((NVIC->IABR[(uint32_t)(IRQn) >> 5] & (1 << ((uint32_t)(IRQn) & 0x1F)))?1:0)); /* Return 1 if active else 0 */
@@ -1583,6 +1753,12 @@ static __INLINE uint32_t NVIC_GetActive(IRQn_Type IRQn)
  *
  * Note: The priority cannot be set for every core interrupt.
  */
+/**
+  * 函    数：写入外部中断或可配置系统异常的优先级
+  * 参    数：IRQn：中断编号，优先级接口也支持可设置优先级的系统异常
+  *           priority：待写入的右对齐优先级，值越小优先级越高
+  * 返 回 值：无
+  */
 static __INLINE void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
 {
   if(IRQn < 0) {
@@ -1606,6 +1782,11 @@ static __INLINE void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
  *
  * Note: The priority cannot be set for every core interrupt.
  */
+/**
+  * 函    数：读取外部中断或可配置系统异常的优先级
+  * 参    数：IRQn：中断编号，优先级接口也支持可设置优先级的系统异常
+  * 返 回 值：右对齐的、与 NVIC 实现位宽一致的优先级值
+  */
 static __INLINE uint32_t NVIC_GetPriority(IRQn_Type IRQn)
 {
 
@@ -1631,6 +1812,13 @@ static __INLINE uint32_t NVIC_GetPriority(IRQn_Type IRQn)
  *
  * The returned priority value can be used for NVIC_SetPriority(...) function
  */
+/**
+  * 函    数：按分组把抢占和响应优先级拼成 NVIC 优先级值
+  * 参    数：PriorityGroup：AIRCR.PRIGROUP 值，低 3 位有效
+  *           PreemptPriority：要编码的抢占优先级
+  *           SubPriority：要编码的响应优先级
+  * 返 回 值：可交给 NVIC_SetPriority 的编码值
+  */
 static __INLINE uint32_t NVIC_EncodePriority (uint32_t PriorityGroup, uint32_t PreemptPriority, uint32_t SubPriority)
 {
   uint32_t PriorityGroupTmp = (PriorityGroup & 0x07);          /* only values 0..7 are used          */
@@ -1662,6 +1850,14 @@ static __INLINE uint32_t NVIC_EncodePriority (uint32_t PriorityGroup, uint32_t P
  *
  * The priority value can be retrieved with NVIC_GetPriority(...) function
  */
+/**
+  * 函    数：按当前分组拆分抢占与响应优先级
+  * 参    数：Priority：待解码的 NVIC 优先级值
+  *           PriorityGroup：AIRCR.PRIGROUP 值，低 3 位有效
+  *           pPreemptPriority：接收拆分出的抢占优先级的指针
+  *           pSubPriority：接收拆分出的响应优先级的指针
+  * 返 回 值：无
+  */
 static __INLINE void NVIC_DecodePriority (uint32_t Priority, uint32_t PriorityGroup, uint32_t* pPreemptPriority, uint32_t* pSubPriority)
 {
   uint32_t PriorityGroupTmp = (PriorityGroup & 0x07);          /* only values 0..7 are used          */
@@ -1691,6 +1887,11 @@ static __INLINE void NVIC_DecodePriority (uint32_t Priority, uint32_t PriorityGr
  * system tick timer / counter in free running mode to generate 
  * periodical interrupts.
  */
+/**
+  * 函    数：配置 SysTick 重装值和中断，并以处理器时钟开始计数
+  * 参    数：ticks：两次 SysTick 中断间的内核时钟周期数
+  * 返 回 值：0 表示配置成功，1 表示重装值超出范围
+  */
 static __INLINE uint32_t SysTick_Config(uint32_t ticks)
 { 
   if (ticks > SysTick_LOAD_RELOAD_Msk)  return (1);            /* Reload value impossible */
@@ -1716,6 +1917,11 @@ static __INLINE uint32_t SysTick_Config(uint32_t ticks)
  *
  * Initiate a system reset request to reset the MCU
  */
+/**
+  * 函    数：写入 AIRCR 请求系统复位
+  * 参    数：无
+  * 返 回 值：不返回
+  */
 static __INLINE void NVIC_SystemReset(void)
 {
   SCB->AIRCR  = ((0x5FA << SCB_AIRCR_VECTKEY_Pos)      | 
@@ -1753,6 +1959,11 @@ extern volatile int ITM_RxBuffer;                    /*!< variable to receive ch
  * The function returns when no debugger is connected that has booked the output.  
  * It is blocking when a debugger is connected, but the previous character send is not transmitted. 
  */
+/**
+  * 函    数：在调试器启用 ITM 时通过端口 0 输出字符
+  * 参    数：ch：要写入 ITM 的字符值
+  * 返 回 值：传入的字符值
+  */
 static __INLINE uint32_t ITM_SendChar (uint32_t ch)
 {
   if ((CoreDebug->DEMCR & CoreDebug_DEMCR_TRCENA_Msk)  &&      /* Trace enabled */
@@ -1775,6 +1986,11 @@ static __INLINE uint32_t ITM_SendChar (uint32_t ch)
  * The function returns when no debugger is connected that has booked the output.  
  * It is blocking when a debugger is connected, but the previous character send is not transmitted. 
  */
+/**
+  * 函    数：从调试共享缓冲区取走一个字符
+  * 参    数：无
+  * 返 回 值：读到的字符，缓冲区无字符时为 -1
+  */
 static __INLINE int ITM_ReceiveChar (void) {
   int ch = -1;                               /* no character available */
 
@@ -1795,6 +2011,11 @@ static __INLINE int ITM_ReceiveChar (void) {
  * The function checks  variable ITM_RxBuffer whether a character is available or not. 
  * The function returns '1' if a character is available and '0' if no character is available. 
  */
+/**
+  * 函    数：查询调试共享缓冲区是否有字符
+  * 参    数：无
+  * 返 回 值：1 表示有字符，0 表示无字符
+  */
 static __INLINE int ITM_CheckChar (void) {
 
   if (ITM_RxBuffer == ITM_RXBUFFER_EMPTY) {

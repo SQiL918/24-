@@ -93,6 +93,11 @@
   *                                0 bits for subpriority
   * @retval None
   */
+/**
+  * 函    数：配置中断抢占优先级与响应优先级的位宽分配
+  * 参    数：NVIC_PriorityGroup：NVIC_PriorityGroup_* 分组常量
+  * 返 回 值：无
+  */
 void NVIC_PriorityGroupConfig(uint32_t NVIC_PriorityGroup)
 {
   /* Check the parameters */
@@ -108,6 +113,11 @@ void NVIC_PriorityGroupConfig(uint32_t NVIC_PriorityGroup)
   * @param  NVIC_InitStruct: pointer to a NVIC_InitTypeDef structure that contains
   *         the configuration information for the specified NVIC peripheral.
   * @retval None
+  */
+/**
+  * 函    数：配置指定中断通道的优先级及使能状态
+  * 参    数：NVIC_InitStruct：待配置的中断编号、抢占优先级、响应优先级和使能状态的结构体指针
+  * 返 回 值：无
   */
 void NVIC_Init(NVIC_InitTypeDef* NVIC_InitStruct)
 {
@@ -153,6 +163,12 @@ void NVIC_Init(NVIC_InitTypeDef* NVIC_InitStruct)
   *         of 0x200.
   * @retval None
   */
+/**
+  * 函    数：设置中断向量表的基址和偏移
+  * 参    数：NVIC_VectTab：向量表所在的 Flash 或 SRAM 基址常量
+  *           Offset：向量表偏移，按目标库要求对齐
+  * 返 回 值：无
+  */
 void NVIC_SetVectorTable(uint32_t NVIC_VectTab, uint32_t Offset)
 { 
   /* Check the parameters */
@@ -171,6 +187,12 @@ void NVIC_SetVectorTable(uint32_t NVIC_VectTab, uint32_t Offset)
   *     @arg NVIC_LP_SLEEPONEXIT
   * @param  NewState: new state of LP condition. This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭选定的内核低功耗特性
+  * 参    数：LowPowerMode：休眠时退出条件和深度休眠等模式位的选择值
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void NVIC_SystemLPConfig(uint8_t LowPowerMode, FunctionalState NewState)
 {
@@ -195,6 +217,11 @@ void NVIC_SystemLPConfig(uint8_t LowPowerMode, FunctionalState NewState)
   *     @arg SysTick_CLKSource_HCLK_Div8: AHB clock divided by 8 selected as SysTick clock source.
   *     @arg SysTick_CLKSource_HCLK: AHB clock selected as SysTick clock source.
   * @retval None
+  */
+/**
+  * 函    数：选择 SysTick 使用的时钟源
+  * 参    数：SysTick_CLKSource：SysTick 时钟选择，HCLK 或 HCLK/8
+  * 返 回 值：无
   */
 void SysTick_CLKSourceConfig(uint32_t SysTick_CLKSource)
 {

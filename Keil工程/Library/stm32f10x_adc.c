@@ -176,6 +176,11 @@
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
   * @retval None
   */
+/**
+  * 函    数：将指定 ADC 寄存器恢复到复位状态
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  * 返 回 值：无
+  */
 void ADC_DeInit(ADC_TypeDef* ADCx)
 {
   /* Check the parameters */
@@ -214,6 +219,12 @@ void ADC_DeInit(ADC_TypeDef* ADCx)
   * @param  ADC_InitStruct: pointer to an ADC_InitTypeDef structure that contains
   *         the configuration information for the specified ADC peripheral.
   * @retval None
+  */
+/**
+  * 函    数：写入 ADC 工作模式、扫描方式、触发源和序列参数
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           ADC_InitStruct：规则转换模式、触发源、对齐和通道数等参数的结构体指针
+  * 返 回 值：无
   */
 void ADC_Init(ADC_TypeDef* ADCx, ADC_InitTypeDef* ADC_InitStruct)
 {
@@ -272,6 +283,11 @@ void ADC_Init(ADC_TypeDef* ADCx, ADC_InitTypeDef* ADC_InitStruct)
   * @param  ADC_InitStruct : pointer to an ADC_InitTypeDef structure which will be initialized.
   * @retval None
   */
+/**
+  * 函    数：为 ADC 初始化结构体填入默认值
+  * 参    数：ADC_InitStruct：用于接收默认配置的结构体指针
+  * 返 回 值：无
+  */
 void ADC_StructInit(ADC_InitTypeDef* ADC_InitStruct)
 {
   /* Reset ADC init structure parameters values */
@@ -295,6 +311,12 @@ void ADC_StructInit(ADC_InitTypeDef* ADC_InitStruct)
   * @param  NewState: new state of the ADCx peripheral.
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：通过 ADON 位使能或关闭 ADC
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void ADC_Cmd(ADC_TypeDef* ADCx, FunctionalState NewState)
 {
@@ -320,6 +342,12 @@ void ADC_Cmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   * @param  NewState: new state of the selected ADC DMA transfer.
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭 ADC 的 DMA 请求
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void ADC_DMACmd(ADC_TypeDef* ADCx, FunctionalState NewState)
 {
@@ -350,6 +378,13 @@ void ADC_DMACmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
+/**
+  * 函    数：配置指定 ADC 中断源的使能状态
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           ADC_IT：ADC 中断源选择值
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
+  */
 void ADC_ITConfig(ADC_TypeDef* ADCx, uint16_t ADC_IT, FunctionalState NewState)
 {
   uint8_t itmask = 0;
@@ -376,6 +411,11 @@ void ADC_ITConfig(ADC_TypeDef* ADCx, uint16_t ADC_IT, FunctionalState NewState)
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
   * @retval None
   */
+/**
+  * 函    数：启动 ADC 校准寄存器复位
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  * 返 回 值：无
+  */
 void ADC_ResetCalibration(ADC_TypeDef* ADCx)
 {
   /* Check the parameters */
@@ -388,6 +428,11 @@ void ADC_ResetCalibration(ADC_TypeDef* ADCx)
   * @brief  Gets the selected ADC reset calibration registers status.
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
   * @retval The new state of ADC reset calibration registers (SET or RESET).
+  */
+/**
+  * 函    数：查询 ADC 校准寄存器是否仍处于复位过程中
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  * 返 回 值：SET 表示正在复位，RESET 表示完成
   */
 FlagStatus ADC_GetResetCalibrationStatus(ADC_TypeDef* ADCx)
 {
@@ -414,6 +459,11 @@ FlagStatus ADC_GetResetCalibrationStatus(ADC_TypeDef* ADCx)
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
   * @retval None
   */
+/**
+  * 函    数：启动 ADC 自校准
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  * 返 回 值：无
+  */
 void ADC_StartCalibration(ADC_TypeDef* ADCx)
 {
   /* Check the parameters */
@@ -426,6 +476,11 @@ void ADC_StartCalibration(ADC_TypeDef* ADCx)
   * @brief  Gets the selected ADC calibration status.
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
   * @retval The new state of ADC calibration (SET or RESET).
+  */
+/**
+  * 函    数：查询 ADC 自校准是否仍在进行
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  * 返 回 值：SET 表示校准中，RESET 表示完成
   */
 FlagStatus ADC_GetCalibrationStatus(ADC_TypeDef* ADCx)
 {
@@ -454,6 +509,12 @@ FlagStatus ADC_GetCalibrationStatus(ADC_TypeDef* ADCx)
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
+/**
+  * 函    数：允许并启动规则组软件转换，或清除相关触发位
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
+  */
 void ADC_SoftwareStartConvCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
 {
   /* Check the parameters */
@@ -477,6 +538,11 @@ void ADC_SoftwareStartConvCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   * @brief  Gets the selected ADC Software start conversion Status.
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
   * @retval The new state of ADC software start conversion (SET or RESET).
+  */
+/**
+  * 函    数：读取规则组的软件启动位
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  * 返 回 值：SET 表示该位仍置位，RESET 表示已清零
   */
 FlagStatus ADC_GetSoftwareStartConvStatus(ADC_TypeDef* ADCx)
 {
@@ -506,6 +572,12 @@ FlagStatus ADC_GetSoftwareStartConvStatus(ADC_TypeDef* ADCx)
   *         count value. This number must be between 1 and 8.
   * @retval None
   */
+/**
+  * 函    数：设置规则组每次间断转换包含的通道数
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           Number：规则组每次间断转换的通道数，1～8
+  * 返 回 值：无
+  */
 void ADC_DiscModeChannelCountConfig(ADC_TypeDef* ADCx, uint8_t Number)
 {
   uint32_t tmpreg1 = 0;
@@ -532,6 +604,12 @@ void ADC_DiscModeChannelCountConfig(ADC_TypeDef* ADCx, uint8_t Number)
   *         on regular group channel.
   *         This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭规则组间断转换模式
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void ADC_DiscModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
 {
@@ -587,6 +665,14 @@ void ADC_DiscModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   *     @arg ADC_SampleTime_239Cycles5: Sample time equal to 239.5 cycles	
   * @retval None
   */
+/**
+  * 函    数：设置规则序列中指定位置的通道及其采样时间
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           ADC_Channel：ADC_Channel_* 输入通道编号
+  *           Rank：规则序列的位置，1～16
+  *           ADC_SampleTime：ADC_SampleTime_* 采样时间档位，单位为 ADC 时钟周期
+  * 返 回 值：无
+  */
 void ADC_RegularChannelConfig(ADC_TypeDef* ADCx, uint8_t ADC_Channel, uint8_t Rank, uint8_t ADC_SampleTime)
 {
   uint32_t tmpreg1 = 0, tmpreg2 = 0;
@@ -609,7 +695,7 @@ void ADC_RegularChannelConfig(ADC_TypeDef* ADCx, uint8_t ADC_Channel, uint8_t Ra
     /* Set the new channel sample time */
     tmpreg1 |= tmpreg2;
     /* Store the new register value */
-    ADCx->SMPR1 = tmpreg1;
+    ADCx->SMPR1 = tmpreg1;                          // 通道 10～17 的采样时间写入 SMPR1
   }
   else /* ADC_Channel include in ADC_Channel_[0..9] */
   {
@@ -624,7 +710,7 @@ void ADC_RegularChannelConfig(ADC_TypeDef* ADCx, uint8_t ADC_Channel, uint8_t Ra
     /* Set the new channel sample time */
     tmpreg1 |= tmpreg2;
     /* Store the new register value */
-    ADCx->SMPR2 = tmpreg1;
+    ADCx->SMPR2 = tmpreg1;                          // 通道 0～9 的采样时间写入 SMPR2
   }
   /* For Rank 1 to 6 */
   if (Rank < 7)
@@ -640,7 +726,7 @@ void ADC_RegularChannelConfig(ADC_TypeDef* ADCx, uint8_t ADC_Channel, uint8_t Ra
     /* Set the SQx bits for the selected rank */
     tmpreg1 |= tmpreg2;
     /* Store the new register value */
-    ADCx->SQR3 = tmpreg1;
+    ADCx->SQR3 = tmpreg1;                           // 规则序列第 1～6 位写入 SQR3，逐位保存通道号
   }
   /* For Rank 7 to 12 */
   else if (Rank < 13)
@@ -683,6 +769,12 @@ void ADC_RegularChannelConfig(ADC_TypeDef* ADCx, uint8_t ADC_Channel, uint8_t Ra
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
+/**
+  * 函    数：使能或关闭规则组外部触发
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
+  */
 void ADC_ExternalTrigConvCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
 {
   /* Check the parameters */
@@ -705,6 +797,11 @@ void ADC_ExternalTrigConvCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
   * @retval The Data conversion value.
   */
+/**
+  * 函    数：读取 ADC 规则组数据寄存器
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  * 返 回 值：按当前对齐方式保存的 16 位寄存器值
+  */
 uint16_t ADC_GetConversionValue(ADC_TypeDef* ADCx)
 {
   /* Check the parameters */
@@ -716,6 +813,11 @@ uint16_t ADC_GetConversionValue(ADC_TypeDef* ADCx)
 /**
   * @brief  Returns the last ADC1 and ADC2 conversion result data in dual mode.
   * @retval The Data conversion value.
+  */
+/**
+  * 函    数：在双 ADC 模式下从 ADC1 读取合并结果
+  * 参    数：无
+  * 返 回 值：32 位打包值，低半字为 ADC1，高半字为 ADC2
   */
 uint32_t ADC_GetDualModeConversionValue(void)
 {
@@ -730,6 +832,12 @@ uint32_t ADC_GetDualModeConversionValue(void)
   * @param  NewState: new state of the selected ADC auto injected conversion
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：设置规则转换之后是否自动启动注入组
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void ADC_AutoInjectedConvCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
 {
@@ -756,6 +864,12 @@ void ADC_AutoInjectedConvCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   *         on injected group channel.
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭注入组间断转换模式
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void ADC_InjectedDiscModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
 {
@@ -796,6 +910,12 @@ void ADC_InjectedDiscModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   *                                          by external trigger (for ADC1, ADC2 and ADC3)
   * @retval None
   */
+/**
+  * 函    数：为注入组选择外部触发源
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           ADC_ExternalTrigInjecConv：注入组触发源选择值
+  * 返 回 值：无
+  */
 void ADC_ExternalTrigInjectedConvConfig(ADC_TypeDef* ADCx, uint32_t ADC_ExternalTrigInjecConv)
 {
   uint32_t tmpreg = 0;
@@ -820,6 +940,12 @@ void ADC_ExternalTrigInjectedConvConfig(ADC_TypeDef* ADCx, uint32_t ADC_External
   *         injected conversion.
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭注入组外部触发
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void ADC_ExternalTrigInjectedConvCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
 {
@@ -846,6 +972,12 @@ void ADC_ExternalTrigInjectedConvCmd(ADC_TypeDef* ADCx, FunctionalState NewState
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
+/**
+  * 函    数：允许并启动注入组软件转换，或清除相关触发位
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
+  */
 void ADC_SoftwareStartInjectedConvCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
 {
   /* Check the parameters */
@@ -869,6 +1001,11 @@ void ADC_SoftwareStartInjectedConvCmd(ADC_TypeDef* ADCx, FunctionalState NewStat
   * @brief  Gets the selected ADC Software start injected conversion Status.
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
   * @retval The new state of ADC software start injected conversion (SET or RESET).
+  */
+/**
+  * 函    数：读取注入组的软件启动位
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  * 返 回 值：SET 表示该位仍置位，RESET 表示已清零
   */
 FlagStatus ADC_GetSoftwareStartInjectedConvCmdStatus(ADC_TypeDef* ADCx)
 {
@@ -926,6 +1063,14 @@ FlagStatus ADC_GetSoftwareStartInjectedConvCmdStatus(ADC_TypeDef* ADCx)
   *     @arg ADC_SampleTime_71Cycles5: Sample time equal to 71.5 cycles	
   *     @arg ADC_SampleTime_239Cycles5: Sample time equal to 239.5 cycles	
   * @retval None
+  */
+/**
+  * 函    数：设置注入序列中指定位置的通道及其采样时间
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           ADC_Channel：ADC_Channel_* 输入通道编号
+  *           Rank：注入序列的位置，1～4
+  *           ADC_SampleTime：ADC_SampleTime_* 采样时间档位，单位为 ADC 时钟周期
+  * 返 回 值：无
   */
 void ADC_InjectedChannelConfig(ADC_TypeDef* ADCx, uint8_t ADC_Channel, uint8_t Rank, uint8_t ADC_SampleTime)
 {
@@ -990,6 +1135,12 @@ void ADC_InjectedChannelConfig(ADC_TypeDef* ADCx, uint8_t ADC_Channel, uint8_t R
   *   This parameter must be a number between 1 to 4.
   * @retval None
   */
+/**
+  * 函    数：设置注入序列的转换通道数
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           Length：ADC 注入序列长度，1～4
+  * 返 回 值：无
+  */
 void ADC_InjectedSequencerLengthConfig(ADC_TypeDef* ADCx, uint8_t Length)
 {
   uint32_t tmpreg1 = 0;
@@ -1022,6 +1173,13 @@ void ADC_InjectedSequencerLengthConfig(ADC_TypeDef* ADCx, uint8_t Length)
   *   This parameter must be a 12bit value.
   * @retval None
   */
+/**
+  * 函    数：设置所选注入序列槽位的转换偏移
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           ADC_InjectedChannel：注入序列的数据槽编号，选择 1～4 中对应的常量
+  *           Offset：写入注入偏移寄存器的偏移值，0～4095
+  * 返 回 值：无
+  */
 void ADC_SetInjectedOffset(ADC_TypeDef* ADCx, uint8_t ADC_InjectedChannel, uint16_t Offset)
 {
   __IO uint32_t tmp = 0;
@@ -1048,6 +1206,12 @@ void ADC_SetInjectedOffset(ADC_TypeDef* ADCx, uint8_t ADC_InjectedChannel, uint1
   *     @arg ADC_InjectedChannel_3: Injected Channel3 selected
   *     @arg ADC_InjectedChannel_4: Injected Channel4 selected
   * @retval The Data conversion value.
+  */
+/**
+  * 函    数：读取所选注入序列槽位的数据寄存器
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           ADC_InjectedChannel：注入序列的数据槽编号，选择 1～4 中对应的常量
+  * 返 回 值：含注入组偏移修正的 16 位数据寄存器值
   */
 uint16_t ADC_GetInjectedConversionValue(ADC_TypeDef* ADCx, uint8_t ADC_InjectedChannel)
 {
@@ -1079,6 +1243,12 @@ uint16_t ADC_GetInjectedConversionValue(ADC_TypeDef* ADCx, uint8_t ADC_InjectedC
   *     @arg ADC_AnalogWatchdog_None: No channel guarded by the analog watchdog
   * @retval None	  
   */
+/**
+  * 函    数：选择模拟看门狗监测的转换组及通道模式
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           ADC_AnalogWatchdog：模拟看门狗模式，例如规则组单通道、注入组全通道或关闭
+  * 返 回 值：无
+  */
 void ADC_AnalogWatchdogCmd(ADC_TypeDef* ADCx, uint32_t ADC_AnalogWatchdog)
 {
   uint32_t tmpreg = 0;
@@ -1103,6 +1273,13 @@ void ADC_AnalogWatchdogCmd(ADC_TypeDef* ADCx, uint32_t ADC_AnalogWatchdog)
   * @param  LowThreshold: the ADC analog watchdog Low threshold value.
   *   This parameter must be a 12bit value.
   * @retval None
+  */
+/**
+  * 函    数：写入模拟看门狗的高、低阈值
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           HighThreshold：模拟看门狗高阈值，0～4095
+  *           LowThreshold：模拟看门狗低阈值，0～4095
+  * 返 回 值：无
   */
 void ADC_AnalogWatchdogThresholdsConfig(ADC_TypeDef* ADCx, uint16_t HighThreshold,
                                         uint16_t LowThreshold)
@@ -1142,6 +1319,12 @@ void ADC_AnalogWatchdogThresholdsConfig(ADC_TypeDef* ADCx, uint16_t HighThreshol
   *     @arg ADC_Channel_17: ADC Channel17 selected
   * @retval None
   */
+/**
+  * 函    数：选择模拟看门狗的单通道监测对象
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           ADC_Channel：ADC_Channel_* 输入通道编号
+  * 返 回 值：无
+  */
 void ADC_AnalogWatchdogSingleChannelConfig(ADC_TypeDef* ADCx, uint8_t ADC_Channel)
 {
   uint32_t tmpreg = 0;
@@ -1163,6 +1346,11 @@ void ADC_AnalogWatchdogSingleChannelConfig(ADC_TypeDef* ADCx, uint8_t ADC_Channe
   * @param  NewState: new state of the temperature sensor.
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭片内温度传感器与内部参考电压通道
+  * 参    数：NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void ADC_TempSensorVrefintCmd(FunctionalState NewState)
 {
@@ -1191,6 +1379,12 @@ void ADC_TempSensorVrefintCmd(FunctionalState NewState)
   *     @arg ADC_FLAG_JSTRT: Start of injected group conversion flag
   *     @arg ADC_FLAG_STRT: Start of regular group conversion flag
   * @retval The new state of ADC_FLAG (SET or RESET).
+  */
+/**
+  * 函    数：读取指定 ADC 状态标志
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           ADC_FLAG：ADC 状态标志掩码
+  * 返 回 值：SET 表示对应标志置位，RESET 表示未置位
   */
 FlagStatus ADC_GetFlagStatus(ADC_TypeDef* ADCx, uint8_t ADC_FLAG)
 {
@@ -1225,6 +1419,12 @@ FlagStatus ADC_GetFlagStatus(ADC_TypeDef* ADCx, uint8_t ADC_FLAG)
   *     @arg ADC_FLAG_STRT: Start of regular group conversion flag
   * @retval None
   */
+/**
+  * 函    数：清除指定 ADC 状态标志
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           ADC_FLAG：ADC 状态标志掩码
+  * 返 回 值：无
+  */
 void ADC_ClearFlag(ADC_TypeDef* ADCx, uint8_t ADC_FLAG)
 {
   /* Check the parameters */
@@ -1243,6 +1443,12 @@ void ADC_ClearFlag(ADC_TypeDef* ADCx, uint8_t ADC_FLAG)
   *     @arg ADC_IT_AWD: Analog watchdog interrupt mask
   *     @arg ADC_IT_JEOC: End of injected conversion interrupt mask
   * @retval The new state of ADC_IT (SET or RESET).
+  */
+/**
+  * 函    数：检查指定 ADC 中断是否已使能且挂起
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           ADC_IT：ADC 中断源选择值
+  * 返 回 值：SET 表示满足两项条件，RESET 表示其他情况
   */
 ITStatus ADC_GetITStatus(ADC_TypeDef* ADCx, uint16_t ADC_IT)
 {
@@ -1279,6 +1485,12 @@ ITStatus ADC_GetITStatus(ADC_TypeDef* ADCx, uint16_t ADC_IT)
   *     @arg ADC_IT_AWD: Analog watchdog interrupt mask
   *     @arg ADC_IT_JEOC: End of injected conversion interrupt mask
   * @retval None
+  */
+/**
+  * 函    数：清除指定 ADC 中断挂起标志
+  * 参    数：ADCx：目标 ADC 实例，具体可用实例取决于芯片和功能
+  *           ADC_IT：ADC 中断源选择值
+  * 返 回 值：无
   */
 void ADC_ClearITPendingBit(ADC_TypeDef* ADCx, uint16_t ADC_IT)
 {

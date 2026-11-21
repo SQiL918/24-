@@ -105,6 +105,11 @@
   * @param  GPIOx: where x can be (A..G) to select the GPIO peripheral.
   * @retval None
   */
+/**
+  * 函    数：把指定 GPIO 端口恢复到外设复位状态
+  * 参    数：GPIOx：目标 GPIO 端口
+  * 返 回 值：无
+  */
 void GPIO_DeInit(GPIO_TypeDef* GPIOx)
 {
   /* Check the parameters */
@@ -156,6 +161,11 @@ void GPIO_DeInit(GPIO_TypeDef* GPIOx)
   * @param  None
   * @retval None
   */
+/**
+  * 函    数：把复用功能配置模块恢复到复位状态
+  * 参    数：无
+  * 返 回 值：无
+  */
 void GPIO_AFIODeInit(void)
 {
   RCC_APB2PeriphResetCmd(RCC_APB2Periph_AFIO, ENABLE);
@@ -170,6 +180,12 @@ void GPIO_AFIODeInit(void)
   *         contains the configuration information for the specified GPIO peripheral.
   * @retval None
   */
+/**
+  * 函    数：配置指定引脚的模式、输出速度及上拉或下拉
+  * 参    数：GPIOx：目标 GPIO 端口
+  *           GPIO_InitStruct：引脚掩码、速度和模式等参数的结构体指针
+  * 返 回 值：无
+  */
 void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_InitTypeDef* GPIO_InitStruct)
 {
   uint32_t currentmode = 0x00, currentpin = 0x00, pinpos = 0x00, pos = 0x00;
@@ -180,13 +196,13 @@ void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_InitTypeDef* GPIO_InitStruct)
   assert_param(IS_GPIO_PIN(GPIO_InitStruct->GPIO_Pin));  
   
 /*---------------------------- GPIO Mode Configuration -----------------------*/
-  currentmode = ((uint32_t)GPIO_InitStruct->GPIO_Mode) & ((uint32_t)0x0F);
+  currentmode = ((uint32_t)GPIO_InitStruct->GPIO_Mode) & ((uint32_t)0x0F);  // 提取引脚配置所用的低位模式字段
   if ((((uint32_t)GPIO_InitStruct->GPIO_Mode) & ((uint32_t)0x10)) != 0x00)
   { 
     /* Check the parameters */
     assert_param(IS_GPIO_SPEED(GPIO_InitStruct->GPIO_Speed));
     /* Output mode */
-    currentmode |= (uint32_t)GPIO_InitStruct->GPIO_Speed;
+    currentmode |= (uint32_t)GPIO_InitStruct->GPIO_Speed;  // 输出模式要把速度档位合并进四位字段
   }
 /*---------------------------- GPIO CRL Configuration ------------------------*/
   /* Configure the eight low port pins */
@@ -209,19 +225,19 @@ void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_InitTypeDef* GPIO_InitStruct)
         /* Reset the corresponding ODR bit */
         if (GPIO_InitStruct->GPIO_Mode == GPIO_Mode_IPD)
         {
-          GPIOx->BRR = (((uint32_t)0x01) << pinpos);
+          GPIOx->BRR = (((uint32_t)0x01) << pinpos);  // 下拉输入用 ODR = 0 选通内部下拉
         }
         else
         {
           /* Set the corresponding ODR bit */
           if (GPIO_InitStruct->GPIO_Mode == GPIO_Mode_IPU)
           {
-            GPIOx->BSRR = (((uint32_t)0x01) << pinpos);
+            GPIOx->BSRR = (((uint32_t)0x01) << pinpos);  // 上拉输入用 ODR = 1 选通内部上拉
           }
         }
       }
     }
-    GPIOx->CRL = tmpreg;
+    GPIOx->CRL = tmpreg;                            // 写回 CRL，更新引脚 0～7 的配置
   }
 /*---------------------------- GPIO CRH Configuration ------------------------*/
   /* Configure the eight high port pins */
@@ -253,7 +269,7 @@ void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_InitTypeDef* GPIO_InitStruct)
         }
       }
     }
-    GPIOx->CRH = tmpreg;
+    GPIOx->CRH = tmpreg;                            // 写回 CRH，更新引脚 8～15 的配置
   }
 }
 
@@ -262,6 +278,11 @@ void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_InitTypeDef* GPIO_InitStruct)
   * @param  GPIO_InitStruct : pointer to a GPIO_InitTypeDef structure which will
   *         be initialized.
   * @retval None
+  */
+/**
+  * 函    数：为 GPIO 初始化结构体填入默认值
+  * 参    数：GPIO_InitStruct：用于接收默认配置的结构体指针
+  * 返 回 值：无
   */
 void GPIO_StructInit(GPIO_InitTypeDef* GPIO_InitStruct)
 {
@@ -277,6 +298,12 @@ void GPIO_StructInit(GPIO_InitTypeDef* GPIO_InitStruct)
   * @param  GPIO_Pin:  specifies the port bit to read.
   *   This parameter can be GPIO_Pin_x where x can be (0..15).
   * @retval The input port pin value.
+  */
+/**
+  * 函    数：读取指定引脚的实际输入电平
+  * 参    数：GPIOx：目标 GPIO 端口
+  *           GPIO_Pin：GPIO_Pin_* 引脚掩码，单引脚接口只允许选择一位
+  * 返 回 值：Bit_SET 为高电平，Bit_RESET 为低电平
   */
 uint8_t GPIO_ReadInputDataBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 {
@@ -302,6 +329,11 @@ uint8_t GPIO_ReadInputDataBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
   * @param  GPIOx: where x can be (A..G) to select the GPIO peripheral.
   * @retval GPIO input data port value.
   */
+/**
+  * 函    数：读取整个 GPIO 端口的输入数据
+  * 参    数：GPIOx：目标 GPIO 端口
+  * 返 回 值：16 位输入数据寄存器值
+  */
 uint16_t GPIO_ReadInputData(GPIO_TypeDef* GPIOx)
 {
   /* Check the parameters */
@@ -316,6 +348,12 @@ uint16_t GPIO_ReadInputData(GPIO_TypeDef* GPIOx)
   * @param  GPIO_Pin:  specifies the port bit to read.
   *   This parameter can be GPIO_Pin_x where x can be (0..15).
   * @retval The output port pin value.
+  */
+/**
+  * 函    数：读取指定引脚的输出锁存位
+  * 参    数：GPIOx：目标 GPIO 端口
+  *           GPIO_Pin：GPIO_Pin_* 引脚掩码，单引脚接口只允许选择一位
+  * 返 回 值：Bit_SET 表示输出锁存为 1，Bit_RESET 表示为 0
   */
 uint8_t GPIO_ReadOutputDataBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 {
@@ -340,6 +378,11 @@ uint8_t GPIO_ReadOutputDataBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
   * @param  GPIOx: where x can be (A..G) to select the GPIO peripheral.
   * @retval GPIO output data port value.
   */
+/**
+  * 函    数：读取整个 GPIO 端口的输出锁存状态
+  * 参    数：GPIOx：目标 GPIO 端口
+  * 返 回 值：16 位输出数据寄存器值
+  */
 uint16_t GPIO_ReadOutputData(GPIO_TypeDef* GPIOx)
 {
   /* Check the parameters */
@@ -354,6 +397,12 @@ uint16_t GPIO_ReadOutputData(GPIO_TypeDef* GPIOx)
   * @param  GPIO_Pin: specifies the port bits to be written.
   *   This parameter can be any combination of GPIO_Pin_x where x can be (0..15).
   * @retval None
+  */
+/**
+  * 函    数：通过置位寄存器一次置高选中的输出位
+  * 参    数：GPIOx：目标 GPIO 端口
+  *           GPIO_Pin：GPIO_Pin_* 引脚掩码，单引脚接口只允许选择一位
+  * 返 回 值：无
   */
 void GPIO_SetBits(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 {
@@ -370,6 +419,12 @@ void GPIO_SetBits(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
   * @param  GPIO_Pin: specifies the port bits to be written.
   *   This parameter can be any combination of GPIO_Pin_x where x can be (0..15).
   * @retval None
+  */
+/**
+  * 函    数：通过复位寄存器一次拉低选中的输出位
+  * 参    数：GPIOx：目标 GPIO 端口
+  *           GPIO_Pin：GPIO_Pin_* 引脚掩码，单引脚接口只允许选择一位
+  * 返 回 值：无
   */
 void GPIO_ResetBits(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 {
@@ -390,6 +445,13 @@ void GPIO_ResetBits(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
   *     @arg Bit_RESET: to clear the port pin
   *     @arg Bit_SET: to set the port pin
   * @retval None
+  */
+/**
+  * 函    数：通过置位或复位寄存器写一个输出位
+  * 参    数：GPIOx：目标 GPIO 端口
+  *           GPIO_Pin：GPIO_Pin_* 引脚掩码，单引脚接口只允许选择一位
+  *           BitVal：写入的逻辑值，Bit_SET 或 Bit_RESET
+  * 返 回 值：无
   */
 void GPIO_WriteBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, BitAction BitVal)
 {
@@ -414,6 +476,12 @@ void GPIO_WriteBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, BitAction BitVal)
   * @param  PortVal: specifies the value to be written to the port output data register.
   * @retval None
   */
+/**
+  * 函    数：用给定值覆盖整个端口的输出数据寄存器
+  * 参    数：GPIOx：目标 GPIO 端口
+  *           PortVal：一次写入整个输出数据寄存器的 16 位值
+  * 返 回 值：无
+  */
 void GPIO_Write(GPIO_TypeDef* GPIOx, uint16_t PortVal)
 {
   /* Check the parameters */
@@ -428,6 +496,12 @@ void GPIO_Write(GPIO_TypeDef* GPIOx, uint16_t PortVal)
   * @param  GPIO_Pin: specifies the port bit to be written.
   *   This parameter can be any combination of GPIO_Pin_x where x can be (0..15).
   * @retval None
+  */
+/**
+  * 函    数：执行锁定序列，冻结指定引脚的配置直至复位
+  * 参    数：GPIOx：目标 GPIO 端口
+  *           GPIO_Pin：GPIO_Pin_* 引脚掩码，单引脚接口只允许选择一位
+  * 返 回 值：无
   */
 void GPIO_PinLockConfig(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 {
@@ -459,6 +533,12 @@ void GPIO_PinLockConfig(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
   *   This parameter can be GPIO_PinSourcex where x can be (0..15).
   * @retval None
   */
+/**
+  * 函    数：将事件输出路由到指定的端口与引脚
+  * 参    数：GPIO_PortSource：GPIO 端口的选择编号
+  *           GPIO_PinSource：引脚编号，0～15
+  * 返 回 值：无
+  */
 void GPIO_EventOutputConfig(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource)
 {
   uint32_t tmpreg = 0x00;
@@ -479,6 +559,11 @@ void GPIO_EventOutputConfig(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource)
   * @param  NewState: new state of the Event output.
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭 GPIO 事件输出
+  * 参    数：NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void GPIO_EventOutputCmd(FunctionalState NewState)
 {
@@ -546,6 +631,12 @@ void GPIO_EventOutputCmd(FunctionalState NewState)
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
+/**
+  * 函    数：配置 AFIO 外设引脚重映射或 SWJ 调试口选项
+  * 参    数：GPIO_Remap：对应外设重映射或 SWJ 调试口配置的宏值
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
+  */
 void GPIO_PinRemapConfig(uint32_t GPIO_Remap, FunctionalState NewState)
 {
   uint32_t tmp = 0x00, tmp1 = 0x00, tmpreg = 0x00, tmpmask = 0x00;
@@ -606,6 +697,12 @@ void GPIO_PinRemapConfig(uint32_t GPIO_Remap, FunctionalState NewState)
   *   This parameter can be GPIO_PinSourcex where x can be (0..15).
   * @retval None
   */
+/**
+  * 函    数：把指定 GPIO 端口的引脚映射到对应 EXTI 线
+  * 参    数：GPIO_PortSource：GPIO 端口的选择编号
+  *           GPIO_PinSource：引脚编号，0～15
+  * 返 回 值：无
+  */
 void GPIO_EXTILineConfig(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource)
 {
   uint32_t tmp = 0x00;
@@ -626,6 +723,11 @@ void GPIO_EXTILineConfig(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource)
   *     @arg GPIO_ETH_MediaInterface_MII: MII mode
   *     @arg GPIO_ETH_MediaInterface_RMII: RMII mode    
   * @retval None
+  */
+/**
+  * 函    数：选择以太网 MII 或 RMII 接口
+  * 参    数：GPIO_ETH_MediaInterface：MII 或 RMII 模式选择值
+  * 返 回 值：无
   */
 void GPIO_ETH_MediaInterfaceConfig(uint32_t GPIO_ETH_MediaInterface) 
 { 

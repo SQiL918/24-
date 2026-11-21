@@ -214,6 +214,11 @@ static __I uint8_t ADCPrescTable[4] = {2, 4, 6, 8};
   * @param  None
   * @retval None
   */
+/**
+  * 函    数：将时钟控制配置恢复到默认内部振荡器状态
+  * 参    数：无
+  * 返 回 值：无
+  */
 void RCC_DeInit(void)
 {
   /* Set HSION bit */
@@ -267,6 +272,11 @@ void RCC_DeInit(void)
   *     @arg RCC_HSE_Bypass: HSE oscillator bypassed with external clock
   * @retval None
   */
+/**
+  * 函    数：配置外部高速时钟为关闭、晶振或旁路
+  * 参    数：RCC_HSE：外部高速晶振开启、关闭或旁路选择
+  * 返 回 值：无
+  */
 void RCC_HSEConfig(uint32_t RCC_HSE)
 {
   /* Check the parameters */
@@ -301,6 +311,11 @@ void RCC_HSEConfig(uint32_t RCC_HSE)
   * - SUCCESS: HSE oscillator is stable and ready to use
   * - ERROR: HSE oscillator not yet ready
   */
+/**
+  * 函    数：等待外部高速时钟就绪，轮询带超时
+  * 参    数：无
+  * 返 回 值：SUCCESS 表示稳定，ERROR 表示超时
+  */
 ErrorStatus RCC_WaitForHSEStartUp(void)
 {
   __IO uint32_t StartUpCounter = 0;
@@ -331,6 +346,11 @@ ErrorStatus RCC_WaitForHSEStartUp(void)
   *   This parameter must be a number between 0 and 0x1F.
   * @retval None
   */
+/**
+  * 函    数：设置内部高速振荡器的修调字段
+  * 参    数：HSICalibrationValue：HSI 修调值，0～31
+  * 返 回 值：无
+  */
 void RCC_AdjustHSICalibrationValue(uint8_t HSICalibrationValue)
 {
   uint32_t tmpreg = 0;
@@ -350,6 +370,11 @@ void RCC_AdjustHSICalibrationValue(uint8_t HSICalibrationValue)
   * @note   HSI can not be stopped if it is used directly or through the PLL as system clock.
   * @param  NewState: new state of the HSI. This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭内部高速振荡器 HSI
+  * 参    数：NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void RCC_HSICmd(FunctionalState NewState)
 {
@@ -375,6 +400,12 @@ void RCC_HSICmd(FunctionalState NewState)
   *   For @b other_STM32_devices, this parameter can be RCC_PLLMul_x where x:[2,16]  
   * @retval None
   */
+/**
+  * 函    数：配置主 PLL 的输入源和倍频值
+  * 参    数：RCC_PLLSource：主 PLL 输入时钟源选择值
+  *           RCC_PLLMul：主 PLL 倍频选择值
+  * 返 回 值：无
+  */
 void RCC_PLLConfig(uint32_t RCC_PLLSource, uint32_t RCC_PLLMul)
 {
   uint32_t tmpreg = 0;
@@ -397,6 +428,11 @@ void RCC_PLLConfig(uint32_t RCC_PLLSource, uint32_t RCC_PLLMul)
   * @note   The PLL can not be disabled if it is used as system clock.
   * @param  NewState: new state of the PLL. This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭主 PLL
+  * 参    数：NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void RCC_PLLCmd(FunctionalState NewState)
 {
@@ -422,6 +458,12 @@ void RCC_PLLCmd(FunctionalState NewState)
   * @param  RCC_PREDIV1_Div: specifies the PREDIV1 clock division factor.
   *   This parameter can be RCC_PREDIV1_Divx where x:[1,16]
   * @retval None
+  */
+/**
+  * 函    数：为互联型器件设置 PREDIV1 输入源和分频
+  * 参    数：RCC_PREDIV1_Source：PREDIV1 输入时钟选择值
+  *           RCC_PREDIV1_Div：PREDIV1 分频选择值
+  * 返 回 值：无
   */
 void RCC_PREDIV1Config(uint32_t RCC_PREDIV1_Source, uint32_t RCC_PREDIV1_Div)
 {
@@ -451,6 +493,11 @@ void RCC_PREDIV1Config(uint32_t RCC_PREDIV1_Source, uint32_t RCC_PREDIV1_Div)
   *   This parameter can be RCC_PREDIV2_Divx where x:[1,16]
   * @retval None
   */
+/**
+  * 函    数：为互联型器件设置 PREDIV2 分频
+  * 参    数：RCC_PREDIV2_Div：PREDIV2 分频选择值
+  * 返 回 值：无
+  */
 void RCC_PREDIV2Config(uint32_t RCC_PREDIV2_Div)
 {
   uint32_t tmpreg = 0;
@@ -475,6 +522,11 @@ void RCC_PREDIV2Config(uint32_t RCC_PREDIV2_Div)
   * @param  RCC_PLL2Mul: specifies the PLL2 multiplication factor.
   *   This parameter can be RCC_PLL2Mul_x where x:{[8,14], 16, 20}
   * @retval None
+  */
+/**
+  * 函    数：为互联型器件设置 PLL2 的倍频
+  * 参    数：RCC_PLL2Mul：PLL2 倍频选择值
+  * 返 回 值：无
   */
 void RCC_PLL2Config(uint32_t RCC_PLL2Mul)
 {
@@ -502,6 +554,11 @@ void RCC_PLL2Config(uint32_t RCC_PLL2Mul)
   * @param  NewState: new state of the PLL2. This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
+/**
+  * 函    数：使能或关闭 PLL2
+  * 参    数：NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
+  */
 void RCC_PLL2Cmd(FunctionalState NewState)
 {
   /* Check the parameters */
@@ -519,6 +576,11 @@ void RCC_PLL2Cmd(FunctionalState NewState)
   * @param  RCC_PLL3Mul: specifies the PLL3 multiplication factor.
   *   This parameter can be RCC_PLL3Mul_x where x:{[8,14], 16, 20}
   * @retval None
+  */
+/**
+  * 函    数：为互联型器件设置 PLL3 的倍频
+  * 参    数：RCC_PLL3Mul：PLL3 倍频选择值
+  * 返 回 值：无
   */
 void RCC_PLL3Config(uint32_t RCC_PLL3Mul)
 {
@@ -543,6 +605,11 @@ void RCC_PLL3Config(uint32_t RCC_PLL3Mul)
   * @param  NewState: new state of the PLL3. This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
+/**
+  * 函    数：使能或关闭 PLL3
+  * 参    数：NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
+  */
 void RCC_PLL3Cmd(FunctionalState NewState)
 {
   /* Check the parameters */
@@ -560,6 +627,11 @@ void RCC_PLL3Cmd(FunctionalState NewState)
   *     @arg RCC_SYSCLKSource_HSE: HSE selected as system clock
   *     @arg RCC_SYSCLKSource_PLLCLK: PLL selected as system clock
   * @retval None
+  */
+/**
+  * 函    数：请求切换系统时钟 SYSCLK 输入源
+  * 参    数：RCC_SYSCLKSource：SYSCLK 输入源选择，如 HSI、HSE 或 PLL
+  * 返 回 值：无
   */
 void RCC_SYSCLKConfig(uint32_t RCC_SYSCLKSource)
 {
@@ -584,6 +656,11 @@ void RCC_SYSCLKConfig(uint32_t RCC_SYSCLKSource)
   *     - 0x04: HSE used as system clock
   *     - 0x08: PLL used as system clock
   */
+/**
+  * 函    数：读取当前已经实际切换到的系统时钟源
+  * 参    数：无
+  * 返 回 值：0x00 表示 HSI，0x04 表示 HSE，0x08 表示 PLL
+  */
 uint8_t RCC_GetSYSCLKSource(void)
 {
   return ((uint8_t)(RCC->CFGR & CFGR_SWS_Mask));
@@ -604,6 +681,11 @@ uint8_t RCC_GetSYSCLKSource(void)
   *     @arg RCC_SYSCLK_Div256: AHB clock = SYSCLK/256
   *     @arg RCC_SYSCLK_Div512: AHB clock = SYSCLK/512
   * @retval None
+  */
+/**
+  * 函    数：配置 SYSCLK 到 AHB 总线的分频
+  * 参    数：RCC_SYSCLK：对 SYSCLK 分频以获得 HCLK 的选择值
+  * 返 回 值：无
   */
 void RCC_HCLKConfig(uint32_t RCC_SYSCLK)
 {
@@ -631,6 +713,11 @@ void RCC_HCLKConfig(uint32_t RCC_SYSCLK)
   *     @arg RCC_HCLK_Div16: APB1 clock = HCLK/16
   * @retval None
   */
+/**
+  * 函    数：配置 AHB 到 APB1 总线的分频
+  * 参    数：RCC_HCLK：对 HCLK 分频得到 APB 时钟的选择值
+  * 返 回 值：无
+  */
 void RCC_PCLK1Config(uint32_t RCC_HCLK)
 {
   uint32_t tmpreg = 0;
@@ -656,6 +743,11 @@ void RCC_PCLK1Config(uint32_t RCC_HCLK)
   *     @arg RCC_HCLK_Div8: APB2 clock = HCLK/8
   *     @arg RCC_HCLK_Div16: APB2 clock = HCLK/16
   * @retval None
+  */
+/**
+  * 函    数：配置 AHB 到 APB2 总线的分频
+  * 参    数：RCC_HCLK：对 HCLK 分频得到 APB 时钟的选择值
+  * 返 回 值：无
   */
 void RCC_PCLK2Config(uint32_t RCC_HCLK)
 {
@@ -697,6 +789,12 @@ void RCC_PCLK2Config(uint32_t RCC_HCLK)
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
+/**
+  * 函    数：使能或关闭选定的 RCC 时钟就绪中断
+  * 参    数：RCC_IT：要配置、查询或清除的 RCC 中断源
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
+  */
 void RCC_ITConfig(uint8_t RCC_IT, FunctionalState NewState)
 {
   /* Check the parameters */
@@ -725,6 +823,11 @@ void RCC_ITConfig(uint8_t RCC_IT, FunctionalState NewState)
   *     @arg RCC_USBCLKSource_PLLCLK_Div1: PLL clock selected as USB clock source
   * @retval None
   */
+/**
+  * 函    数：选择 USB 的 PLL 时钟分频
+  * 参    数：RCC_USBCLKSource：USB 时钟分频选择值
+  * 返 回 值：无
+  */
 void RCC_USBCLKConfig(uint32_t RCC_USBCLKSource)
 {
   /* Check the parameters */
@@ -742,6 +845,11 @@ void RCC_USBCLKConfig(uint32_t RCC_USBCLKSource)
   *     @arg  RCC_OTGFSCLKSource_PLLVCO_Div3: PLL VCO clock divided by 2 selected as USB OTG FS clock source
   *     @arg  RCC_OTGFSCLKSource_PLLVCO_Div2: PLL VCO clock divided by 2 selected as USB OTG FS clock source
   * @retval None
+  */
+/**
+  * 函    数：选择互联型器件的 OTG FS 时钟分频
+  * 参    数：RCC_OTGFSCLKSource：互联型 OTG FS 时钟分频选择值
+  * 返 回 值：无
   */
 void RCC_OTGFSCLKConfig(uint32_t RCC_OTGFSCLKSource)
 {
@@ -762,6 +870,11 @@ void RCC_OTGFSCLKConfig(uint32_t RCC_OTGFSCLKSource)
   *     @arg RCC_PCLK2_Div6: ADC clock = PCLK2/6
   *     @arg RCC_PCLK2_Div8: ADC clock = PCLK2/8
   * @retval None
+  */
+/**
+  * 函    数：配置 APB2 时钟到 ADC 的分频
+  * 参    数：RCC_PCLK2：对 PCLK2 分频以获得 ADC 时钟的选择值
+  * 返 回 值：无
   */
 void RCC_ADCCLKConfig(uint32_t RCC_PCLK2)
 {
@@ -789,6 +902,11 @@ void RCC_ADCCLKConfig(uint32_t RCC_PCLK2)
   *     @arg RCC_I2S2CLKSource_PLL3_VCO: PLL3 VCO clock selected as I2S2 clock entry
   * @retval None
   */
+/**
+  * 函    数：选择 I²S2 的时钟源
+  * 参    数：RCC_I2S2CLKSource：I²S2 的时钟源选择值
+  * 返 回 值：无
+  */
 void RCC_I2S2CLKConfig(uint32_t RCC_I2S2CLKSource)
 {
   /* Check the parameters */
@@ -808,6 +926,11 @@ void RCC_I2S2CLKConfig(uint32_t RCC_I2S2CLKSource)
   *     @arg RCC_I2S3CLKSource_PLL3_VCO: PLL3 VCO clock selected as I2S3 clock entry
   * @retval None
   */
+/**
+  * 函    数：选择 I²S3 的时钟源
+  * 参    数：RCC_I2S3CLKSource：I²S3 的时钟源选择值
+  * 返 回 值：无
+  */
 void RCC_I2S3CLKConfig(uint32_t RCC_I2S3CLKSource)
 {
   /* Check the parameters */
@@ -825,6 +948,11 @@ void RCC_I2S3CLKConfig(uint32_t RCC_I2S3CLKSource)
   *     @arg RCC_LSE_ON: LSE oscillator ON
   *     @arg RCC_LSE_Bypass: LSE oscillator bypassed with external clock
   * @retval None
+  */
+/**
+  * 函    数：配置外部低速时钟为关闭、晶振或旁路
+  * 参    数：RCC_LSE：外部低速晶振开启、关闭或旁路选择
+  * 返 回 值：无
   */
 void RCC_LSEConfig(uint8_t RCC_LSE)
 {
@@ -859,6 +987,11 @@ void RCC_LSEConfig(uint8_t RCC_LSE)
   * @param  NewState: new state of the LSI. This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
+/**
+  * 函    数：使能或关闭内部低速振荡器 LSI
+  * 参    数：NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
+  */
 void RCC_LSICmd(FunctionalState NewState)
 {
   /* Check the parameters */
@@ -876,6 +1009,11 @@ void RCC_LSICmd(FunctionalState NewState)
   *     @arg RCC_RTCCLKSource_HSE_Div128: HSE clock divided by 128 selected as RTC clock
   * @retval None
   */
+/**
+  * 函    数：选择 RTC 的输入时钟源
+  * 参    数：RCC_RTCCLKSource：RTC 时钟源选择，如 LSE、LSI 或 HSE 分频
+  * 返 回 值：无
+  */
 void RCC_RTCCLKConfig(uint32_t RCC_RTCCLKSource)
 {
   /* Check the parameters */
@@ -889,6 +1027,11 @@ void RCC_RTCCLKConfig(uint32_t RCC_RTCCLKSource)
   * @note   This function must be used only after the RTC clock was selected using the RCC_RTCCLKConfig function.
   * @param  NewState: new state of the RTC clock. This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：打开或关闭 RTC 时钟
+  * 参    数：NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void RCC_RTCCLKCmd(FunctionalState NewState)
 {
@@ -904,6 +1047,11 @@ void RCC_RTCCLKCmd(FunctionalState NewState)
   * @note   The result of this function could be not correct when using 
   *         fractional value for HSE crystal.  
   * @retval None
+  */
+/**
+  * 函    数：按当前 RCC 寄存器计算各级时钟频率
+  * 参    数：RCC_Clocks：用于接收 SYSCLK、HCLK、PCLK1、PCLK2、ADCCLK 频率的结构体指针，单位 Hz
+  * 返 回 值：无
   */
 void RCC_GetClocksFreq(RCC_ClocksTypeDef* RCC_Clocks)
 {
@@ -1061,6 +1209,12 @@ void RCC_GetClocksFreq(RCC_ClocksTypeDef* RCC_Clocks)
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
+/**
+  * 函    数：打开或关闭所选 AHB 外设时钟门控
+  * 参    数：RCC_AHBPeriph：AHB 外设位掩码，可合并多个支持的外设
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
+  */
 void RCC_AHBPeriphClockCmd(uint32_t RCC_AHBPeriph, FunctionalState NewState)
 {
   /* Check the parameters */
@@ -1091,6 +1245,12 @@ void RCC_AHBPeriphClockCmd(uint32_t RCC_AHBPeriph, FunctionalState NewState)
   * @param  NewState: new state of the specified peripheral clock.
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：打开或关闭所选 APB2 外设时钟门控
+  * 参    数：RCC_APB2Periph：APB2 外设位掩码，可合并多个支持的外设
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void RCC_APB2PeriphClockCmd(uint32_t RCC_APB2Periph, FunctionalState NewState)
 {
@@ -1123,6 +1283,12 @@ void RCC_APB2PeriphClockCmd(uint32_t RCC_APB2Periph, FunctionalState NewState)
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
+/**
+  * 函    数：打开或关闭所选 APB1 外设时钟门控
+  * 参    数：RCC_APB1Periph：APB1 外设位掩码，可合并多个支持的外设
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
+  */
 void RCC_APB1PeriphClockCmd(uint32_t RCC_APB1Periph, FunctionalState NewState)
 {
   /* Check the parameters */
@@ -1149,6 +1315,12 @@ void RCC_APB1PeriphClockCmd(uint32_t RCC_APB1Periph, FunctionalState NewState)
   * @param  NewState: new state of the specified peripheral reset.
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：置位或释放所选 AHB 外设的复位
+  * 参    数：RCC_AHBPeriph：AHB 外设位掩码，可合并多个支持的外设
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void RCC_AHBPeriphResetCmd(uint32_t RCC_AHBPeriph, FunctionalState NewState)
 {
@@ -1182,6 +1354,12 @@ void RCC_AHBPeriphResetCmd(uint32_t RCC_AHBPeriph, FunctionalState NewState)
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
+/**
+  * 函    数：置位或释放所选 APB2 外设的复位
+  * 参    数：RCC_APB2Periph：APB2 外设位掩码，可合并多个支持的外设
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
+  */
 void RCC_APB2PeriphResetCmd(uint32_t RCC_APB2Periph, FunctionalState NewState)
 {
   /* Check the parameters */
@@ -1213,6 +1391,12 @@ void RCC_APB2PeriphResetCmd(uint32_t RCC_APB2Periph, FunctionalState NewState)
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
+/**
+  * 函    数：置位或释放所选 APB1 外设的复位
+  * 参    数：RCC_APB1Periph：APB1 外设位掩码，可合并多个支持的外设
+  *           NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
+  */
 void RCC_APB1PeriphResetCmd(uint32_t RCC_APB1Periph, FunctionalState NewState)
 {
   /* Check the parameters */
@@ -1234,6 +1418,11 @@ void RCC_APB1PeriphResetCmd(uint32_t RCC_APB1Periph, FunctionalState NewState)
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
+/**
+  * 函    数：置位或释放备份域复位
+  * 参    数：NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
+  */
 void RCC_BackupResetCmd(FunctionalState NewState)
 {
   /* Check the parameters */
@@ -1246,6 +1435,11 @@ void RCC_BackupResetCmd(FunctionalState NewState)
   * @param  NewState: new state of the Clock Security System..
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
+  */
+/**
+  * 函    数：使能或关闭外部高速时钟的安全监测
+  * 参    数：NewState：ENABLE 使能或设置，DISABLE 关闭或清除
+  * 返 回 值：无
   */
 void RCC_ClockSecuritySystemCmd(FunctionalState NewState)
 {
@@ -1278,6 +1472,11 @@ void RCC_ClockSecuritySystemCmd(FunctionalState NewState)
   *     @arg RCC_MCO_PLLCLK_Div2: PLL clock divided by 2 selected
   *   
   * @retval None
+  */
+/**
+  * 函    数：选择在 MCO 引脚输出的时钟
+  * 参    数：RCC_MCO：MCO 输出时钟的选择值
+  * 返 回 值：无
   */
 void RCC_MCOConfig(uint8_t RCC_MCO)
 {
@@ -1322,6 +1521,11 @@ void RCC_MCOConfig(uint8_t RCC_MCO)
   *     @arg RCC_FLAG_LPWRRST: Low Power reset
   *   
   * @retval The new state of RCC_FLAG (SET or RESET).
+  */
+/**
+  * 函    数：读取指定的时钟就绪或复位原因标志
+  * 参    数：RCC_FLAG：要读取的 RCC_FLAG_* 状态常量
+  * 返 回 值：SET 表示标志置位，RESET 表示未置位
   */
 FlagStatus RCC_GetFlagStatus(uint8_t RCC_FLAG)
 {
@@ -1368,6 +1572,11 @@ FlagStatus RCC_GetFlagStatus(uint8_t RCC_FLAG)
   * @param  None
   * @retval None
   */
+/**
+  * 函    数：统一清除 RCC 保存的复位原因标志
+  * 参    数：无
+  * 返 回 值：无
+  */
 void RCC_ClearFlag(void)
 {
   /* Set RMVF bit to clear the reset flags */
@@ -1398,6 +1607,11 @@ void RCC_ClearFlag(void)
   *     @arg RCC_IT_CSS: Clock Security System interrupt
   *   
   * @retval The new state of RCC_IT (SET or RESET).
+  */
+/**
+  * 函    数：读取指定 RCC 中断挂起标志
+  * 参    数：RCC_IT：要配置、查询或清除的 RCC 中断源
+  * 返 回 值：SET 表示已置位，RESET 表示未置位
   */
 ITStatus RCC_GetITStatus(uint8_t RCC_IT)
 {
@@ -1444,6 +1658,11 @@ ITStatus RCC_GetITStatus(uint8_t RCC_IT)
   *   
   *     @arg RCC_IT_CSS: Clock Security System interrupt
   * @retval None
+  */
+/**
+  * 函    数：清除指定 RCC 中断挂起标志
+  * 参    数：RCC_IT：要配置、查询或清除的 RCC 中断源
+  * 返 回 值：无
   */
 void RCC_ClearITPendingBit(uint8_t RCC_IT)
 {
